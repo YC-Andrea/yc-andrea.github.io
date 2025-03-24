@@ -4,6 +4,9 @@ title: "CMU 15112 Term Project"
 subtitle: "SpongeBob Themed Game in Python"
 author: "Yingqian Cao"
 header-style: text
+tags:
+  - CMU
+  - Python
 ---
 
 Introduction
