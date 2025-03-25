@@ -2,6 +2,7 @@
 layout: post
 title: "CMU 15112 Term Project"
 subtitle: "SpongeBob Themed Game in Python"
+date:       2023-01-01 12:00:00
 author: "Yingqian Cao"
 header-style: text
 catalog:      true
