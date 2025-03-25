@@ -11,12 +11,12 @@ Hey，我是曹颖茜（a.k.a. Andrea）
 ##### 发表论文
 
 - Reevaluating Stock Price Prediction: The Influence of Machine Learning on Forecast Accuracy  
-・ ECAI-2024 电子商务与人工智能国际会议  
-・ 用更先进的模型重新对股价进行预测
+ECAI-2024 电子商务与人工智能国际会议  
+用更先进的模型重新对股价进行预测
 
 - Review of Research on GFRP Anti-floating Anchors
-・ Journal of Physics (ISSN: 1742-6588)  
-・ 系统综述GFRP抗浮锚杆研究进展与工程应用
+Journal of Physics (ISSN: 1742-6588)  
+系统综述GFRP抗浮锚杆研究进展与工程应用
 
 ##### 教育背景
 🎓 卡耐基梅隆大学 土木工程与环境硕士 GPA: 3.71/4.0  
