@@ -10,11 +10,11 @@ I am pursuing my second master degree at [University of California, Berkeley](ht
 
 ##### Publications
 
-**Reevaluating Stock Price Prediction: The Influence of Machine Learning on Forecast Accuracy**
+**Reevaluating Stock Price Prediction: The Influence of Machine Learning on Forecast Accuracy**  
 ECAI 2024 International Conference on E-Commerce and Artificial Intelligence  
 Re-analysed Stock Price based on more advanced models 
 
-**Review of Research on GFRP Anti-floating Anchors**
+**Review of Research on GFRP Anti-floating Anchors**  
 Journal of Physics (ISSN: 1742-6588)  
 Systematic review of GFRP anchor applications in civil engineering
 
