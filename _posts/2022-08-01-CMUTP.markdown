@@ -107,8 +107,8 @@ def DrawWin(app, canvas):
 
 ## Challenges and Solutions
 
-1.Collision Detection: Implemented efficient collision logic using geometric calculations
-2.Resource Management: Carefully managed loading/releasing of multiple image/sound assets
+1.Collision Detection: Implemented efficient collision logic using geometric calculations  
+2.Resource Management: Carefully managed loading/releasing of multiple image/sound assets  
 3.Level Design: Balanced difficulty and fun factor across different level layouts
 
 ## Conclusion
