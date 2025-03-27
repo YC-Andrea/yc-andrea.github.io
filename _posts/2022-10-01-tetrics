@@ -1,0 +1,158 @@
+---
+layout: post
+title: "CMU 15112 Project"
+subtitle: "Building Tetris in Python"
+date:       2022-10-01 12:00:00
+author: "Yingqian Cao"
+header-style: text
+catalog:      true
+tags:
+  - CMU
+  - Python
+---
+
+## Introduction
+
+In this blog post, I'll walk through my implementation of Tetris for [Carnegie Mellon University's 15112 course (Fundamentals of Programming)](https://www.cs.cmu.edu/~112/syllabus.html), covering the key features I developed and the challenges I faced along the way.
+![](/img/Game2-Tetrics.png)
+
+
+## Project Overview
+I created a fully functional Tetris game with:  
+Standard Tetris pieces (I, J, L, O, S, T, Z)  
+Piece rotation and movement controls  
+Line clearing mechanics  
+Score tracking  
+Game over detection  
+Visual feedback and animations  
+
+## Key Implementation Details
+
+### 1. Game Architecture
+The game uses CMU's 112 graphics library built on tkinter. The core structure includes:  
+```ts
+def appStarted(app):
+    # Initialize game board and settings
+    (app.rows, app.cols, app.cellSize, app.margin) = gameDimensions()
+    app.board = [[app.emptyColor]*app.cols for i in range(app.rows)]
+    app.tetrisPieces = [iPiece, jPiece, lPiece, oPiece, sPiece, tPiece, zPiece]
+    app.tetrisPieceColors = ["red", "yellow", "magenta", "pink", "cyan", "green", "orange"]
+    newFallingPiece(app)
+```
+
+### 2. Piece Movement System
+I implemented all standard Tetris controls:  
+Left/Right movement  
+Soft drop (Down key)  
+Hard drop (Spacebar)  
+Rotation (Up key)    
+```ts
+def keyPressed(app, event):
+    if (event.key == 'Up'):      rotateFallingPiece(app)
+    elif (event.key == 'Down'):  moveFallingPiece(app, +1, 0)
+    elif (event.key == 'Left'):  moveFallingPiece(app, 0, -1)
+    elif (event.key == 'Right'): moveFallingPiece(app, 0, +1)
+    elif (event.key == 'Space'): hardDrop(app)
+```
+
+### 3. Core Game Logic
+The timer drives automatic piece falling and game state checks:    
+```ts
+def timerFired(app):
+    if not moveFallingPiece(app, +1, 0):  # Try to move piece down
+        placeFallingPiece(app)            # Lock piece if can't move
+        newFallingPiece(app)              # Get new piece
+        if not fallingPieceIsLegal(app):  # Check for game over
+            app.gameOver = True
+```
+
+
+## Technical Challenges & Solutions
+
+### Challenge 1: Piece Rotation Collision
+Problem: Rotated pieces could clip through walls or existing blocks.  
+Solution: Implemented rotation with collision checking:  
+```ts
+def rotateFallingPiece(app):
+    oldPiece = app.fallingPiece
+    # Create rotated piece matrix
+    newPiece = [[0]*newCols for i in range(newRows)]
+    # Perform rotation
+    for i in range(oldRows):
+        for j in range(oldCols):
+            newR = oldCols - 1 - j
+            newC = i
+            newPiece[newR][newC] = oldPiece[i][j]
+    # Check if rotation is legal
+    app.fallingPiece = newPiece
+    if not fallingPieceIsLegal(app):
+        app.fallingPiece = oldPiece  # Revert if illegal
+```
+### Challenge 2: Line Clearing Logic
+Problem: Needed efficient way to detect and clear full rows while maintaining game state.  
+Solution: Developed a row scanning system with list operations:  
+```ts
+def removeFullRows(app):
+    count = 0
+    for row in range(app.rows):
+        if all(color != app.emptyColor for color in app.board[row]):
+            count += 1
+            # Remove full row and add new empty row at top
+            app.board.pop(row)
+            app.board.insert(0, [app.emptyColor]*app.cols)
+    # Score increases exponentially with simultaneous line clears
+    app.score += count ** 2  
+```
+
+### Challenge 3: Hard Drop Implementation
+Problem: Needed to instantly place piece at lowest possible position.  
+Solution: Created a recursive drop function:  
+```ts
+def hardDrop(app):
+    while moveFallingPiece(app, +1, 0):  # Keep moving down until collision
+        continue
+    placeFallingPiece(app)  # Lock piece in place
+```
+
+### Challenge 4: Game State Management
+Problem: Needed to cleanly handle game over conditions and restarts.  
+Solution: Implemented state checks and reset functionality:  
+```ts
+def timerFired(app):
+    # ... existing movement logic ...
+    if not fallingPieceIsLegal(app):  # New piece can't be placed
+        app.gameOver = True
+```
+```ts        
+def keyPressed(app, event):
+    if (event.key == 'r'):  # Full game reset
+        appStarted(app)
+```
+
+## Visual Design Elements
+
+The game features:  
+Color-coded pieces  
+Clean grid layout  
+Score display  
+Game over overlay  
+```ts
+def drawCell(app, canvas, row, col):
+    # Calculate pixel coordinates for each cell
+    x0 = app.margin + (app.width - 2*app.margin) * col / app.cols
+    y0 = app.margin + (app.height - 2*app.margin) * row / app.rows
+    x1 = x0 + (app.width - 2*app.margin) / app.cols
+    y1 = y0 + (app.height - 2*app.margin) / app.rows
+    return (x0, y0, x1, y1)
+```
+
+
+## Lessons Learned
+
+**Matrix transformations** are fundamental for piece rotation  
+**Collision detection** requires considering both board boundaries and existing pieces  
+**State management** is crucial for clean game flow  
+**List operations** can efficiently handle board modifications  
+**Visual feedback** (like the hard drop) significantly improves gameplay feel  
+
+This project gave me deep appreciation for classic game architecture and the elegance of Tetris's simple but profound design. The complete implementation demonstrates core CS concepts like 2D arrays, matrix operations, and event-driven programming in a practical, engaging context.
