@@ -2,7 +2,7 @@
 layout: post
 title: "Building an Element Combination Game"
 subtitle: "Little Alchemy Clone"
-date:       2022-09-20 12:00:00
+date:       2022-10-20 12:00:00
 author: "Yingqian Cao"
 header-style: text
 catalog:      true
