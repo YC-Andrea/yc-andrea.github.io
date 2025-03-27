@@ -107,13 +107,111 @@ def DrawWin(app, canvas):
 
 ## Challenges and Solutions
 
-1.Collision Detection: Implemented efficient collision logic using geometric calculations  
-2.Resource Management: Carefully managed loading/releasing of multiple image/sound assets  
-3.Level Design: Balanced difficulty and fun factor across different level layouts
+### Challenge 1: Ladder Climbing Mechanism  
+Problem:  
+Character movement felt unresponsive near ladders, often getting stuck.  
+Solutions:  
+Implemented ladder proximity detection (Climbing1/2/3)  
+Disabled gravity while on ladders to allow free vertical movement  
+Added a climbing buffer zone (adjusted via num1 parameter)  
+```ts
+def Climbing2(app, ladlist, x, y, r, num1):
+    cx, cy = x-r, y-r
+    for ladder in ladlist:
+        l_x = ladder.x + ladder.w//2
+        l_y = ladder.y + ladder.h//2
+        if dis(l_x, l_y, cx, cy) <= num1:
+            return True  # Enable climbing
+    return False
+```
+### Challenge 2: Pixel-Perfect Collision
+Problem:  
+Basic rectangle collision caused stuttering when "grazing" walls or allowed clipping through thin objects.  
+Solutions:  
+Implemented multi-tier collision detection:  
+Initial broad-phase (AABB rectangle check)  
+Followed by precise pixel-distance verification  
+Custom collision boxes for different objects (e.g., vertical-only checks for ladders)  
+```ts
+def SBSPHitPlakton(app, Sx, Sy, Px, Py):
+    # Precise distance check
+    if abs(Sx-Px) < 10 and abs(Sy-Py-app.pla_h) < 10:
+        return True
+    return False
+```
+
+### Challenge 3: Weapon Hit Detection
+Problem:  
+Weapon projectiles struggled to reliably hit enemies due to unreasonable detection ranges.  
+Solutions:  
+Added projectile trajectory prediction  
+Switched to circular collision detection (instead of rectangular)  
+Implemented hit confirmation buffer zones  
+```ts
+def ShotPlankton(app, Sx, Sy, Px, Py):
+    if SBSPHitPlakton1(app, Sx, Sy, Px, Py) and app.weapon > 0:
+        app.weapon -= 1
+        return True
+    return False
+```
+### Challenge 4: Evolving Plankton AI Across Levels
+In my game, Plankton serves as the primary enemy with distinct movement behaviors per level.  
+#### 1. Core Movement Architecture  
+**Data Structure:**    
+```ts
+# Each Plankton instance stores:
+# [x_pos, y_pos, base_y_pos, current_speed]
+app.KBlist1 = [
+    [x1, y1, base_y1, speed1],
+    [x2, y2, base_y2, speed2]
+]
+```
+**Update Logic:**   
+```ts
+def timerFired(app):
+    for enemy in app.KBlist1:
+        enemy[1] += enemy[3]  # Update y-position by speed
+```
+#### 2. Level 1: Simple Patrol Movement  
+**Initial Approach:**  
+```ts
+# Fixed directional sequence
+app.direction = [(0,4),(4,0),(0,-4),(0,4),(0,-4),(-4,0)]
+```
+Issues:  
+Overly predictable patterns  
+Frequent edge-sticking on platforms  
+No player tracking  
+**Optimized Solution:**  
+```ts
+def movePattern1(enemy):
+    # Reverse direction at boundaries
+    if enemy[1] > enemy[2] + 100 or enemy[1] < enemy[2] - 100:
+        enemy[3] *= -1  # Invert speed
+```
+#### 3. Level 2: Intelligent Player Tracking  
+**Enhanced Algorithm:**  
+```ts
+def Psmarter(Px, Py, Sx, Sy, dx, dy):
+    """Advanced tracking algorithm"""
+    # Calculate player distance
+    distance = ((Sx-Px)**2 + (Sy-Py)**2)**0.5
+    # Dynamic sensitivity adjustment
+    sensitivity = max(0.3, 2 - distance/80)  
+    # Directional steering
+    if Sy-Py < -10*sensitivity and dy > 0:
+        dy *= -1
+    elif Sx-Px < -10*sensitivity and dx > 0:
+        dx *= -1
+    # Random perturbation for unpredictability
+    dx += random.uniform(-0.5, 0.5)
+    dy += random.uniform(-0.5, 0.5)
+    return dx, dy
+```
+
 
 ## Conclusion
 
 This project not only reinforced my programming knowledge from CMU 15112 but also deepened my understanding of key game development concepts like resource management, input handling, collision detection, and game state management. I hope this article inspires you to begin your own game development journey!
 
-Feel free to leave comments or questions below!
 
