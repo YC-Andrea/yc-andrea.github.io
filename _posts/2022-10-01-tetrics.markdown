@@ -1,7 +1,7 @@
 ---
 layout: post
-title: "CMU 15112 Project"
-subtitle: "Building Tetris in Python"
+title: "Building a Tetris Game"
+subtitle: "Tetris Game in Python"
 date:       2022-10-01 12:00:00
 author: "Yingqian Cao"
 header-style: text
@@ -19,51 +19,75 @@ In this blog post, I'll walk through my implementation of Tetris for [Carnegie M
 
 ## Project Overview
 I created a fully functional Tetris game with:  
-Standard Tetris pieces (I, J, L, O, S, T, Z)  
-Piece rotation and movement controls  
-Line clearing mechanics  
-Score tracking  
-Game over detection  
-Visual feedback and animations  
+1. Standard Tetris pieces (I, J, L, O, S, T, Z)  
+2. Piece rotation and movement controls  
+3. Line clearing mechanics  
+4. Score tracking  
+5. Game over detection  
+6. Visual feedback and animations  
 
 ## Key Implementation Details
 
 ### 1. Game Architecture
-The game uses CMU's 112 graphics library built on tkinter. The core structure includes:  
+The game uses `cmu_112_graphics` library built on tkinter. The core structure includes:
 ```ts
-def appStarted(app):
-    # Initialize game board and settings
-    (app.rows, app.cols, app.cellSize, app.margin) = gameDimensions()
-    app.board = [[app.emptyColor]*app.cols for i in range(app.rows)]
-    app.tetrisPieces = [iPiece, jPiece, lPiece, oPiece, sPiece, tPiece, zPiece]
-    app.tetrisPieceColors = ["red", "yellow", "magenta", "pink", "cyan", "green", "orange"]
-    newFallingPiece(app)
+FUNCTION initializeGameApplication():
+    // Set up game layout
+    GET game dimensions (rows, columns, cell size, margin) FROM configuration
+    // Initialize empty game grid
+    CREATE 2D grid WITH dimensions (rows × columns)
+    FOR EACH row IN grid:
+        FILL row WITH "empty" color representation
+    // Configure game pieces
+    DEFINE supported shape templates (I, J, L, O, S, T, Z blocks)
+    DEFINE color mapping FOR EACH shape template
+    // Prepare first active game piece
+    GENERATE new random tetromino piece AT top-center OF grid
+    ASSIGN corresponding color TO new piece
+    RETURN initialized game state
+END FUNCTION
 ```
 
 ### 2. Piece Movement System
-I implemented all standard Tetris controls:  
+I implemented all standard Tetris controls:
 Left/Right movement  
 Soft drop (Down key)  
 Hard drop (Spacebar)  
 Rotation (Up key)    
 ```ts
-def keyPressed(app, event):
-    if (event.key == 'Up'):      rotateFallingPiece(app)
-    elif (event.key == 'Down'):  moveFallingPiece(app, +1, 0)
-    elif (event.key == 'Left'):  moveFallingPiece(app, 0, -1)
-    elif (event.key == 'Right'): moveFallingPiece(app, 0, +1)
-    elif (event.key == 'Space'): hardDrop(app)
+PROCEDURE HandlePlayerInput(inputKey):
+    CASE OF inputKey:
+        WHEN UP ARROW:
+            ATTEMPT TO ROTATE active game piece clockwise
+        WHEN DOWN ARROW:
+            ATTEMPT TO SHIFT active piece downward by 1 unit
+        WHEN LEFT ARROW:
+            ATTEMPT TO MOVE active piece leftward by 1 column
+        WHEN RIGHT ARROW:
+            ATTEMPT TO MOVE active piece rightward by 1 column
+        WHEN SPACEBAR:
+            INSTANTLY DROP piece to lowest valid position
+    END CASE
+END PROCEDURE
 ```
 
 ### 3. Core Game Logic
-The timer drives automatic piece falling and game state checks:    
+The timer drives automatic piece falling and game state checks:  
 ```ts
-def timerFired(app):
-    if not moveFallingPiece(app, +1, 0):  # Try to move piece down
-        placeFallingPiece(app)            # Lock piece if can't move
-        newFallingPiece(app)              # Get new piece
-        if not fallingPieceIsLegal(app):  # Check for game over
-            app.gameOver = True
+PROCEDURE ProcessGameTick():
+    // Attempt automatic downward movement
+    success ← ATTEMPT MOVE active piece downward by 1 unit
+    IF move was unsuccessful:
+        // Finalize piece placement
+        MERGE active piece blocks WITH game board
+        CLEAR completed rows IF ANY
+        // Prepare new piece
+        GENERATE new active piece AT default spawn position
+        ASSIGN new piece random shape and color
+        // Game over condition check
+        IF new piece position COLLIDES WITH existing blocks:
+            SET game state TO OVER
+END PROCEDURE
 ```
 
 
@@ -73,60 +97,88 @@ def timerFired(app):
 Problem: Rotated pieces could clip through walls or existing blocks.  
 Solution: Implemented rotation with collision checking:  
 ```ts
-def rotateFallingPiece(app):
-    oldPiece = app.fallingPiece
-    # Create rotated piece matrix
-    newPiece = [[0]*newCols for i in range(newRows)]
-    # Perform rotation
-    for i in range(oldRows):
-        for j in range(oldCols):
-            newR = oldCols - 1 - j
-            newC = i
-            newPiece[newR][newC] = oldPiece[i][j]
-    # Check if rotation is legal
-    app.fallingPiece = newPiece
-    if not fallingPieceIsLegal(app):
-        app.fallingPiece = oldPiece  # Revert if illegal
+PROCEDURE AttemptPieceRotation():
+    // Preserve original state for potential rollback
+    currentOrientation ← COPY active piece's block arrangement
+    // Generate rotated version (clockwise transformation)
+    CREATE rotated version BY:
+        SWAPPING matrix dimensions (rows ↔ columns)
+        REVERSING order of elements in each new row
+    // Temporarily apply rotation
+    UPDATE active piece's block arrangement WITH rotated version
+    IF rotated position VIOLATES board boundaries OR OVERLAPS existing blocks:
+        // Revert to original orientation if invalid
+        RESTORE active piece's block arrangement FROM currentOrientation
+    ELSE:
+        // Maintain new orientation if valid
+        KEEP rotated block arrangement
+END PROCEDURE
 ```
 ### Challenge 2: Line Clearing Logic
 Problem: Needed efficient way to detect and clear full rows while maintaining game state.  
 Solution: Developed a row scanning system with list operations:  
 ```ts
-def removeFullRows(app):
-    count = 0
-    for row in range(app.rows):
-        if all(color != app.emptyColor for color in app.board[row]):
-            count += 1
-            # Remove full row and add new empty row at top
-            app.board.pop(row)
-            app.board.insert(0, [app.emptyColor]*app.cols)
-    # Score increases exponentially with simultaneous line clears
-    app.score += count ** 2  
+PROCEDURE ClearCompletedLines():
+    linesCleared ← 0
+    // Scan all playfield rows
+    FOR EACH row IN gameGrid FROM TOP TO BOTTOM:
+        IF row CONTAINS NO EMPTY CELLS:
+            // Remove completed line and add new empty top row
+            linesCleared ← linesCleared + 1
+            DELETE current row
+            PREPEND new empty row TO grid TOP  
+    // Update scoring (bonus for multiple simultaneous clears)
+    playerScore ← playerScore + (linesCleared × linesCleared)
+END PROCEDURE  
 ```
 
 ### Challenge 3: Hard Drop Implementation
 Problem: Needed to instantly place piece at lowest possible position.  
 Solution: Created a recursive drop function:  
 ```ts
-def hardDrop(app):
-    while moveFallingPiece(app, +1, 0):  # Keep moving down until collision
-        continue
-    placeFallingPiece(app)  # Lock piece in place
+PROCEDURE ActivateInstantDrop():
+    // Rapid descent mechanics
+    WHILE active piece CAN move downward WITHOUT COLLISION:
+        MOVE piece downward CONTINUOUSLY
+    // Final placement operations
+    ANCHOR piece AT current position
+    INTEGRATE piece blocks INTO game board
+    TRIGGER post-placement checks:
+        - Line clearance evaluation
+        - New piece spawning
+        - Game over verification
+END PROCEDURE
 ```
 
 ### Challenge 4: Game State Management
 Problem: Needed to cleanly handle game over conditions and restarts.  
 Solution: Implemented state checks and reset functionality:  
 ```ts
-def timerFired(app):
-    # ... existing movement logic ...
-    if not fallingPieceIsLegal(app):  # New piece can't be placed
-        app.gameOver = True
+PROCEDURE CheckGameOverCondition():
+    // Verify if new piece placement would cause collision
+    IF active piece spawn position OVERLAPS existing blocks:
+        SET game state TO 'terminated'
+        FREEZE all game inputs
+END PROCEDURE
+PROCEDURE HandleSystemCommands(inputKey):
+    CASE OF inputKey:
+        WHEN 'R' KEY PRESSED:
+            INVOKE full game reset sequence
+    END CASE
+END PROCEDURE
 ```
 ```ts        
-def keyPressed(app, event):
-    if (event.key == 'r'):  # Full game reset
-        appStarted(app)
+PROCEDURE ResetGameState():
+    // Restore initial game conditions
+    REINITIALIZE:
+        - Game grid TO empty state
+        - Score counter TO zero
+        - Active piece TO null
+        - Game state TO 'active'
+    // Begin new game cycle
+    GENERATE new starting piece
+    RESUME game timer
+END PROCEDURE
 ```
 
 ## Visual Design Elements
@@ -137,22 +189,23 @@ Clean grid layout
 Score display  
 Game over overlay  
 ```ts
-def drawCell(app, canvas, row, col):
-    # Calculate pixel coordinates for each cell
-    x0 = app.margin + (app.width - 2*app.margin) * col / app.cols
-    y0 = app.margin + (app.height - 2*app.margin) * row / app.rows
-    x1 = x0 + (app.width - 2*app.margin) / app.cols
-    y1 = y0 + (app.height - 2*app.margin) / app.rows
-    return (x0, y0, x1, y1)
+PROCEDURE CalculateCellBounds(gridPosition, gridDimensions, canvasSize):
+    // Determine play area boundaries
+    playAreaWidth ← canvasSize.width - (2 × marginOffset)
+    playAreaHeight ← canvasSize.height - (2 × marginOffset)
+    // Calculate cell dimensions
+    cellWidth ← playAreaWidth ÷ totalGridColumns
+    cellHeight ← playAreaHeight ÷ totalGridRows
+    // Compute screen coordinates
+    startX ← marginOffset + (columnIndex × cellWidth)
+    startY ← marginOffset + (rowIndex × cellHeight)
+    endX ← startX + cellWidth
+    endY ← startY + cellHeight
+    RETURN rectangularBoundary (startX, startY, endX, endY)
+END PROCEDURE
 ```
 
 
 ## Lessons Learned
-
-**Matrix transformations** are fundamental for piece rotation  
-**Collision detection** requires considering both board boundaries and existing pieces  
-**State management** is crucial for clean game flow  
-**List operations** can efficiently handle board modifications  
-**Visual feedback** (like the hard drop) significantly improves gameplay feel  
 
 This project gave me deep appreciation for classic game architecture and the elegance of Tetris's simple but profound design. The complete implementation demonstrates core CS concepts like 2D arrays, matrix operations, and event-driven programming in a practical, engaging context.
