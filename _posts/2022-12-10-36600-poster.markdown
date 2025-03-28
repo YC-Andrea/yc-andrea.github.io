@@ -15,8 +15,7 @@ tags:
 
 As part of the statistics curriculum at Carnegie Mellon University (CMU), my team and 
 I conducted an in-depth analysis of U.S. domestic [flight delay data from December 2016]
-(http://rosmarus.refsmmat.com/datasets/datasets/ﬂight-delays/
-) using R. 
+(http://rosmarus.refsmmat.com/datasets/datasets/ﬂight-delays/) using R. 
 Flight delays are a common issue in the aviation industry, affecting millions of passengers annually 
 and causing significant economic losses. Our goal was to develop a predictive model that could 
 accurately forecast flight arrival delay times (ARR_DELAY).
@@ -24,7 +23,6 @@ accurately forecast flight arrival delay times (ARR_DELAY).
 
 
 ## Data Preparation and Exploratory Analysis
-
 We obtained the raw dataset from the U.S. Bureau of Transportation Statistics,
 containing 34,314 flight records from December 2016, specifically focusing on flights between 
 Chicago O'Hare (ORD) and Dallas-Fort Worth (DFW) airports.
@@ -60,24 +58,22 @@ summary(bg.outB$BestModel)$adj.r.squared  # Achieved 0.971 adjusted R-squared
 
 
 ## Key Findings
-
-### Variable Importance:  
+#### Variable Importance:
 Departure delay (DEP_DELAY) was the most significant predictor  
 Taxi-out time (TAXI_OUT) and airline (CARRIER) also had notable impact
 
-### Model Comparison:  
+#### Model Comparison:
 Linear regression and random forest performed best (MSE≈57-73)  
 KNN performed worst (MSE=128.47), partly due to its inability to handle categorical variables effectively  
 Decision trees tended to overfit, showing poor test performance (MSE=103.458)  
 
-### BIC vs AIC:   
+#### BIC vs AIC: 
 BIC selected a more parsimonious model (1 variable)  
 AIC selected a more complex model (6 variables)  
 This validated the theory that BIC prevents overfitting while AIC tends to fit data better  
 
 
 ## Visual Analysis
-
 We created several key visualizations to understand the data:  
 **Variable distribution histograms:** Showed most flight delays concentrated in 0-30 minutes  
 **Correlation matrix:** Revealed high correlation between ARR_DELAY and DEP_DELAY (r≈0.9)  
@@ -102,18 +98,8 @@ Random forest and XGBoost required longer training times
 Solution: Used subsampling and parallel computing to accelerate training  
 
 
-## Conclusions and Business Implications
+## Lessons Learned
 
-Our analysis demonstrated that simple linear regression performed exceptionally well in predicting flight delays, achieving an adjusted R² of 0.971. These findings have practical significance:  
-
-**Airline Operations:** Can proactively allocate resources to handle potential large-scale delays  
-**Passenger Services:** Airports can provide more accurate delay information to improve passenger experience  
-**Cost Control:** Reduce additional operational costs caused by delays  
-
-Future work could explore:  
-Encoding destinations as geographic coordinates or regions  
-Incorporating external variables like weather data  
-Developing real-time prediction systems  
-
+Our analysis demonstrated that simple linear regression performed exceptionally well in predicting flight delays, achieving an adjusted R² of 0.971.  
 This project not only deepened my understanding of statistical modeling but also showcased R's powerful capabilities in data science projects—from data cleaning to advanced modeling and result visualization, the R ecosystem provides a complete solution.
 
