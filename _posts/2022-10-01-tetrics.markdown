@@ -53,7 +53,7 @@ I implemented all standard Tetris controls:
 Left/Right movement  
 Soft drop (Down key)  
 Hard drop (Spacebar)  
-Rotation (Up key)    
+Rotation (Up key)
 ```ts
 PROCEDURE HandlePlayerInput(inputKey):
     CASE OF inputKey:
@@ -72,7 +72,7 @@ END PROCEDURE
 ```
 
 ### 3. Core Game Logic
-The timer drives automatic piece falling and game state checks:  
+The timer drives automatic piece falling and game state checks:
 ```ts
 PROCEDURE ProcessGameTick():
     // Attempt automatic downward movement
@@ -95,7 +95,7 @@ END PROCEDURE
 
 ### Challenge 1: Piece Rotation Collision
 Problem: Rotated pieces could clip through walls or existing blocks.  
-Solution: Implemented rotation with collision checking:  
+Solution: Implemented rotation with collision checking:
 ```ts
 PROCEDURE AttemptPieceRotation():
     // Preserve original state for potential rollback
@@ -116,7 +116,7 @@ END PROCEDURE
 ```
 ### Challenge 2: Line Clearing Logic
 Problem: Needed efficient way to detect and clear full rows while maintaining game state.  
-Solution: Developed a row scanning system with list operations:  
+Solution: Developed a row scanning system with list operations:
 ```ts
 PROCEDURE ClearCompletedLines():
     linesCleared ← 0
@@ -134,7 +134,7 @@ END PROCEDURE
 
 ### Challenge 3: Hard Drop Implementation
 Problem: Needed to instantly place piece at lowest possible position.  
-Solution: Created a recursive drop function:  
+Solution: Created a recursive drop function:
 ```ts
 PROCEDURE ActivateInstantDrop():
     // Rapid descent mechanics
@@ -152,7 +152,7 @@ END PROCEDURE
 
 ### Challenge 4: Game State Management
 Problem: Needed to cleanly handle game over conditions and restarts.  
-Solution: Implemented state checks and reset functionality:  
+Solution: Implemented state checks and reset functionality:
 ```ts
 PROCEDURE CheckGameOverCondition():
     // Verify if new piece placement would cause collision
@@ -182,12 +182,11 @@ END PROCEDURE
 ```
 
 ## Visual Design Elements
-
 The game features:  
 Color-coded pieces  
 Clean grid layout  
 Score display  
-Game over overlay  
+Game over overlay
 ```ts
 PROCEDURE CalculateCellBounds(gridPosition, gridDimensions, canvasSize):
     // Determine play area boundaries
