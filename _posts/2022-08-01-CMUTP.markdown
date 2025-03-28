@@ -113,7 +113,7 @@ Character movement felt unresponsive near ladders, often getting stuck.
 Solutions:  
 Implemented ladder proximity detection (Climbing1/2/3)  
 Disabled gravity while on ladders to allow free vertical movement  
-Added a climbing buffer zone (adjusted via num1 parameter)  
+Added a climbing buffer zone (adjusted via num1 parameter)
 ```ts
 def Climbing2(app, ladlist, x, y, r, num1):
     cx, cy = x-r, y-r
@@ -131,7 +131,7 @@ Solutions:
 Implemented multi-tier collision detection:  
 Initial broad-phase (AABB rectangle check)  
 Followed by precise pixel-distance verification  
-Custom collision boxes for different objects (e.g., vertical-only checks for ladders)  
+Custom collision boxes for different objects (e.g., vertical-only checks for ladders)
 ```ts
 def SBSPHitPlakton(app, Sx, Sy, Px, Py):
     # Precise distance check
@@ -146,7 +146,7 @@ Weapon projectiles struggled to reliably hit enemies due to unreasonable detecti
 Solutions:  
 Added projectile trajectory prediction  
 Switched to circular collision detection (instead of rectangular)  
-Implemented hit confirmation buffer zones  
+Implemented hit confirmation buffer zones
 ```ts
 def ShotPlankton(app, Sx, Sy, Px, Py):
     if SBSPHitPlakton1(app, Sx, Sy, Px, Py) and app.weapon > 0:
@@ -190,7 +190,7 @@ def movePattern1(enemy):
         enemy[3] *= -1  # Invert speed
 ```
 #### 3. Level 2: Intelligent Player Tracking
-**Enhanced Algorithm:**  
+**Enhanced Algorithm:**
 ```ts
 def Psmarter(Px, Py, Sx, Sy, dx, dy):
     """Advanced tracking algorithm"""
