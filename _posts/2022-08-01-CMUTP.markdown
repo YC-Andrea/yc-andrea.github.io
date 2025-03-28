@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "CMU 15112 Term Project"
+title: " 2D Platform Game"
 subtitle: "SpongeBob Themed Game in Python"
 date:       2022-08-20 12:00:00
 author: "Yingqian Cao"
@@ -155,9 +155,9 @@ def ShotPlankton(app, Sx, Sy, Px, Py):
     return False
 ```
 ### Challenge 4: Evolving Plankton AI Across Levels
-In my game, Plankton serves as the primary enemy with distinct movement behaviors per level.  
+In my game, Plankton serves as the primary enemy with distinct movement behaviors per level.
 #### 1. Core Movement Architecture  
-**Data Structure:**    
+**Data Structure:**
 ```ts
 # Each Plankton instance stores:
 # [x_pos, y_pos, base_y_pos, current_speed]
@@ -166,14 +166,14 @@ app.KBlist1 = [
     [x2, y2, base_y2, speed2]
 ]
 ```
-**Update Logic:**   
+**Update Logic:**
 ```ts
 def timerFired(app):
     for enemy in app.KBlist1:
         enemy[1] += enemy[3]  # Update y-position by speed
 ```
 #### 2. Level 1: Simple Patrol Movement  
-**Initial Approach:**  
+**Initial Approach:**
 ```ts
 # Fixed directional sequence
 app.direction = [(0,4),(4,0),(0,-4),(0,4),(0,-4),(-4,0)]
@@ -182,14 +182,14 @@ Issues:
 Overly predictable patterns  
 Frequent edge-sticking on platforms  
 No player tracking  
-**Optimized Solution:**  
+**Optimized Solution:**
 ```ts
 def movePattern1(enemy):
     # Reverse direction at boundaries
     if enemy[1] > enemy[2] + 100 or enemy[1] < enemy[2] - 100:
         enemy[3] *= -1  # Invert speed
 ```
-#### 3. Level 2: Intelligent Player Tracking  
+#### 3. Level 2: Intelligent Player Tracking
 **Enhanced Algorithm:**  
 ```ts
 def Psmarter(Px, Py, Sx, Sy, dx, dy):
