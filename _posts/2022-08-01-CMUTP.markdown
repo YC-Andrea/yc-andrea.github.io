@@ -40,7 +40,7 @@ Inspired by classic platformer games, players control SpongeBob to move across p
 ## Code Structure
 
 1. Game Initialization
-The `appStarted` function initializes game resources including images, sounds, character positions, and platform layouts:
+The `appStarted` function initializes game resources including images, sounds, character positions, and platform layouts:  
 ```ts
 def appStarted(app):
     app.sound_win = Sound('win.mp3')
@@ -57,7 +57,7 @@ def appStarted(app):
 ```
 
 2. Game Logic
-The keyPressed and timerFired functions handle player input and game state updates:
+The keyPressed and timerFired functions handle player input and game state updates:  
 ```ts
 def keyPressed(app, event):
     if event.key == 'Up':
@@ -75,7 +75,7 @@ def keyPressed(app, event):
 ```
 
 3. Game Rendering
-The redrawAll function draws all game elements:
+The redrawAll function draws all game elements:  
 ```ts
 def redrawAll(app, canvas):
     if app.screencount == 0:
@@ -91,7 +91,7 @@ def redrawAll(app, canvas):
 ```
 
 4. Game Over
-Win/lose screens are displayed when appropriate:
+Win/lose screens are displayed when appropriate:  
 ```ts
 def DrawLose(app, canvas):
     canvas.create_image(500, 300, image=ImageTk.PhotoImage(app.image_lose2))
@@ -113,7 +113,7 @@ Character movement felt unresponsive near ladders, often getting stuck.
 Solutions:  
 Implemented ladder proximity detection (Climbing1/2/3)  
 Disabled gravity while on ladders to allow free vertical movement  
-Added a climbing buffer zone (adjusted via num1 parameter)
+Added a climbing buffer zone (adjusted via num1 parameter)  
 ```ts
 def Climbing2(app, ladlist, x, y, r, num1):
     cx, cy = x-r, y-r
@@ -131,7 +131,7 @@ Solutions:
 Implemented multi-tier collision detection:  
 Initial broad-phase (AABB rectangle check)  
 Followed by precise pixel-distance verification  
-Custom collision boxes for different objects (e.g., vertical-only checks for ladders)
+Custom collision boxes for different objects (e.g., vertical-only checks for ladders)  
 ```ts
 def SBSPHitPlakton(app, Sx, Sy, Px, Py):
     # Precise distance check
@@ -146,7 +146,7 @@ Weapon projectiles struggled to reliably hit enemies due to unreasonable detecti
 Solutions:  
 Added projectile trajectory prediction  
 Switched to circular collision detection (instead of rectangular)  
-Implemented hit confirmation buffer zones
+Implemented hit confirmation buffer zones  
 ```ts
 def ShotPlankton(app, Sx, Sy, Px, Py):
     if SBSPHitPlakton1(app, Sx, Sy, Px, Py) and app.weapon > 0:
@@ -157,7 +157,7 @@ def ShotPlankton(app, Sx, Sy, Px, Py):
 ### Challenge 4: Evolving Plankton AI Across Levels
 In my game, Plankton serves as the primary enemy with distinct movement behaviors per level.
 #### 1. Core Movement Architecture  
-**Data Structure:**
+**Data Structure:**  
 ```ts
 # Each Plankton instance stores:
 # [x_pos, y_pos, base_y_pos, current_speed]
@@ -166,14 +166,14 @@ app.KBlist1 = [
     [x2, y2, base_y2, speed2]
 ]
 ```
-**Update Logic:**
+**Update Logic:**  
 ```ts
 def timerFired(app):
     for enemy in app.KBlist1:
         enemy[1] += enemy[3]  # Update y-position by speed
 ```
 #### 2. Level 1: Simple Patrol Movement  
-**Initial Approach:**
+**Initial Approach:**  
 ```ts
 # Fixed directional sequence
 app.direction = [(0,4),(4,0),(0,-4),(0,4),(0,-4),(-4,0)]
@@ -182,7 +182,7 @@ Issues:
 Overly predictable patterns  
 Frequent edge-sticking on platforms  
 No player tracking  
-**Optimized Solution:**
+**Optimized Solution:**  
 ```ts
 def movePattern1(enemy):
     # Reverse direction at boundaries
@@ -190,7 +190,7 @@ def movePattern1(enemy):
         enemy[3] *= -1  # Invert speed
 ```
 #### 3. Level 2: Intelligent Player Tracking
-**Enhanced Algorithm:**
+**Enhanced Algorithm:**  
 ```ts
 def Psmarter(Px, Py, Sx, Sy, dx, dy):
     """Advanced tracking algorithm"""
