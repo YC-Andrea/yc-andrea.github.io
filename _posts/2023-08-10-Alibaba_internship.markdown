@@ -27,7 +27,7 @@ analytical journey.
 ## Methodology & Tool Stack
 
 ### 1. Feature Normalization
-**Why Normalize?**
+**Why Normalize?**  
 In e-commerce data:
 - Price range: ¥13.9 - ¥169  
 - Sales range: 200 - 50,000+  
