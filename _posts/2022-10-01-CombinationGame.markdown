@@ -14,7 +14,7 @@ tags:
 ## Introduction
 
 In this blog post, I'll walk through my implementation of a Little Alchemy-style element combination game developed for [Carnegie Mellon University's 15112 course (Fundamentals of Programming)](https://www.cs.cmu.edu/~112/syllabus.html). This project involved creating a game where players combine basic elements to discover new ones, complete with visual feedback and strategic gameplay elements.
-![](/img/Game1.png)
+![](/img/CombinationGame_gif.mov)
 
 
 ## Project Overview
