@@ -27,13 +27,12 @@ analytical journey.
 ## Methodology & Tool Stack
 
 ### 1. Feature Normalization
-#### Why Normalize?
-In e-commerce data:  
+**Why Normalize?**
+In e-commerce data:
 - Price range: ¥13.9 - ¥169  
 - Sales range: 200 - 50,000+  
 - Transaction growth: -15% to +68%  
-Without normalization, high-magnitude features dominate distance calculations:
-
+- Without normalization, high-magnitude features dominate distance calculations
 ```ts
 from sklearn.preprocessing import MinMaxScaler, StandardScaler
 # Process positive features (price/sales)
@@ -58,7 +57,6 @@ def find_optimal_k(data, max_k=10):
     deltas = np.diff(distortions)
     curvature = np.diff(deltas)
     return np.argmax(curvature) + 2  # Return optimal K
-
 optimal_k = find_optimal_k(scaled_data)  
 ```
 **Silhouette Score Validation**
@@ -89,7 +87,7 @@ for r in range(2, len(features)+1):
             best_score = score
 ```
 Final key feature combination:
-"Price × Sales × Transaction Growth"
+`Price × Sales × Transaction Growth`
 
 ## Boston Matrix Construction Process
 ### 1. Dynamic Threshold Setting
@@ -142,10 +140,4 @@ logic. For example, while the Elbow Method and Silhouette Coefficient for K-mean
 the final choice of K-value must consider business context; the dynamic threshold setting for the Boston Matrix 
 made me realize there are no "standard answers" in data, only "optimal solutions."  
 
-My two biggest takeaways are:  
-**The importance of feature engineering**  
-Subtle differences in data preprocessing (like choosing between MinMaxScaler and StandardScaler) can significantly impact model performance.
-**Technology serves business needs**  
-Even the most sophisticated algorithms are hard to implement effectively when divorced from business context. 
-For instance, operational strategies for "star products" must incorporate user behavior data to avoid becoming "armchair theorizing."
 
