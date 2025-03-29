@@ -27,98 +27,126 @@ analytical journey.
 
 ## Methodology & Tool Stack
 
-### 1. K-means Clustering: Uncovering Hidden Product Patterns
-#### Methodology Optimization:
-**1. Feature Engineering:**
-Selected 6 core features: Price, Total Sales, Reviews, MTD, Estimated Monthly Sales, June Sales  
-Applied hybrid normalization:
-```ts
-from sklearn.preprocessing import StandardScaler, RobustScaler  
-# RobustScaler for price/MTD (outlier-prone)  
-# StandardScaler for sales/reviews (normal distribution)  
-```
-**2. Dynamic K-value Selection:**  
-Evaluated K=2 to K=10 using multi-criteria:
-```ts
-from sklearn.metrics import silhouette_score, calinski_harabasz_score  
-def optimal_k_search(data, max_k=10):  
-    results = []  
-    for k in range(2, max_k+1):  
-        kmeans = KMeans(n_clusters=k, n_init='auto')  
-        labels = kmeans.fit_predict(data)  
-        results.append({  
-            'K':k,   
-            'Inertia':kmeans.inertia_,  
-            'Silhouette':silhouette_score(data, labels),  
-            'CH_Score':calinski_harabasz_score(data, labels)  
-        })  
-    return pd.DataFrame(results)  
-```
-**Breakthrough Findings:**  
-Original K=2 analysis split data into outliers vs. normal clusters, missing nuanced patterns.  
-K=5 emerged as optimal through multi-dimensional validation:
-![](/img/k-means.png）
+### 1. Feature Normalization
+#### Why Normalize?
+In e-commerce data:  
+- Price range: ¥13.9 - ¥169  
+- Sales range: 200 - 50,000+  
+- Transaction growth: -15% to +68%  
+Without normalization, high-magnitude features dominate distance calculations:
 
-## 2. Boston Matrix: The Golden Compass for Product Classification
-Using market growth rate (Y-axis) and market share (X-axis), 
-products were categorized into four quadrants:  
-
-**Stars:** High growth + High share (e.g., ZAM-Recommended Normal SKU 12)  
-**Cash Cows:** Low growth + High share (e.g., Normal SKU 4)  
-**Question Marks:** High growth + Low share (e.g., Normal SKU 64)  
-**Dogs:** Low growth + Low share (e.g., Normal SKU 31)  
-**Key Technical Implementation:**
 ```ts
-# Data standardization and quadrant classification  
-def categorize_product(growth_rate, market_share):  
-    median_growth = np.median(growth_rates)  
-    median_share = np.median(market_shares)  
-    if growth_rate > median_growth:  
-        return "Star" if market_share > median_share else "Question Mark"  
-    else:  
-        return "Cash Cow" if market_share > median_share else "Dog"  
+from sklearn.preprocessing import MinMaxScaler, StandardScaler
+# Process positive features (price/sales)
+price_scaler = MinMaxScaler(feature_range=(0,1)) 
+normalized_price = price_scaler.fit_transform(df[['price']])
+# Process growth data containing negatives
+growth_scaler = StandardScaler()
+scaled_growth = growth_scaler.fit_transform(df[['growth_rate']])
 ```
 
-
-
-## Key Findings
-#### Variable Importance:
-Departure delay (DEP_DELAY) was the most significant predictor  
-Taxi-out time (TAXI_OUT) and airline (CARRIER) also had notable impact
-#### Model Comparison:
-Linear regression and random forest performed best (MSE≈57-73)  
-KNN performed worst (MSE=128.47), partly due to its inability to handle categorical variables effectively   
-Decision trees tended to overfit, showing poor test performance (MSE=103.458)  
-#### BIC vs AIC: 
-BIC selected a more parsimonious model (1 variable), AIC selected a more complex model (6 variables). This validated the theory that BIC prevents overfitting while AIC tends to fit data better  
-
-## Visual Analysis
-We created several key visualizations to understand the data:  
-**Variable distribution histograms:** Showed most flight delays concentrated in 0-30 minutes  
-**Correlation matrix:** Revealed high correlation between ARR_DELAY and DEP_DELAY (r≈0.9)  
-**BIC curve plot:** Helped determine optimal model complexity  
+## 2. Deep Dive into K-means Clustering
+### 1. Determining Optimal K Value
+**Elbow Method Implementation**
 ```ts
-# BIC curve plotting code
-ggplot(data=df.bic, mapping=aes(x=p,y=BIC)) + 
-  geom_point(size=1.5,color="blue") + 
-  geom_line(color="blue") +
-  ylim(min(bic),min(bic+100))
+def find_optimal_k(data, max_k=10):
+    distortions = []
+    for k in range(1, max_k+1):
+        kmeans = KMeans(n_clusters=k, n_init=10)
+        kmeans.fit(data)
+        distortions.append(kmeans.inertia_)
+    # Calculate curvature change
+    deltas = np.diff(distortions)
+    curvature = np.diff(deltas)
+    return np.argmax(curvature) + 2  # Return optimal K
+
+optimal_k = find_optimal_k(scaled_data)  
+```
+**Silhouette Score Validation**
+```ts
+from sklearn.metrics import silhouette_score
+best_score = -1
+for k in range(2, 6):
+    kmeans = KMeans(n_clusters=k)
+    labels = kmeans.fit_predict(scaled_data)
+    score = silhouette_score(scaled_data, labels)
+    if score > best_score:
+        best_k = k
+        best_score = score
+```
+### 2. Feature Combination Experiments
+Finding optimal feature combinations through exhaustive search:
+```ts
+features = ['price', 'sales', 'growth', 'share']
+best_combo = []
+best_score = 0
+for r in range(2, len(features)+1):
+    for combo in itertools.combinations(features, r):
+        subset = df[list(combo)]
+        # Evaluate clustering quality
+        score = evaluate_clustering(subset)
+        if score > best_score:
+            best_combo = combo
+            best_score = score
+```
+Final key feature combination:
+"Price × Sales × Transaction Growth"
+
+## Boston Matrix Construction Process
+### 1. Dynamic Threshold Setting
+```ts
+# Adaptive threshold calculation
+def dynamic_threshold(data):
+    q1 = np.percentile(data, 25)
+    q3 = np.percentile(data, 75)
+    iqr = q3 - q1
+    # Exclude outliers
+    upper_bound = q3 + 1.5*iqr
+    lower_bound = q1 - 1.5*iqr
+    return np.clip(data, lower_bound, upper_bound).mean()
+market_share_thresh = dynamic_threshold(cleaned_share)
+growth_thresh = dynamic_threshold(cleaned_growth)
+```
+### 2. Four-Quadrant Classification Logic
+```ts
+graph TD
+    A[Raw Data] --> B{Market Share ≥2%?}
+    B -->|Yes| C{Growth Rate ≥4%?}
+    C -->|Yes| D[Star Products]
+    C -->|No| E[Cash Cows]
+    B -->|No| F{Growth Rate ≥4%?}
+    F -->|Yes| G[Question Marks]
+    F -->|No| H[Dogs]
+```
+### 3. Outlier Handling Strategy
+Identified three special cases:
+```ts
+outliers = df[
+    (df['growth_rate'] > growth_thresh*3) | 
+    (df['market_share'] > share_thresh*3)
+]
+# Handling approach:
+# 1. High-growth outliers: Keep and flag separately
+# 2. High-share outliers: Validate with operations team
+# 3. Negative-growth anomalies: Classify as special observation group under Dogs
 ```
 
-## Challenges and Solutions
-**Categorical Variable Handling:**  
-Random forest limited factors to 53 levels per column, forcing removal of destination variable  
-Solution: Consider encoding destinations as geographic regions rather than specific airports  
-**Fair Model Comparison:**  
-Ensured all models used the same variable set for fair comparison  
-Linear regression remained robust even after removing destination variable  
-**Computational Efficiency:**  
-Random forest and XGBoost required longer training times  
-Solution: Used subsampling and parallel computing to accelerate training  
+
 
 
 ## Lessons Learned
 
-Our analysis demonstrated that simple linear regression performed exceptionally well in predicting flight delays, achieving an adjusted R² of 0.971.  
-This project not only deepened my understanding of statistical modeling but also showcased R's powerful capabilities in data science projects—from data cleaning to advanced modeling and result visualization, the R ecosystem provides a complete solution.
+This analysis has given me profound insight that data analytics is not just a technical task,
+but an extension of business understanding. From data cleaning and normalization to K-means clustering 
+and Boston Matrix construction, each step requires finding a balance between mathematical rigor and business 
+logic. For example, while the Elbow Method and Silhouette Coefficient for K-means provide theoretical guidance,
+the final choice of K-value must consider business context; the dynamic threshold setting for the Boston Matrix 
+made me realize there are no "standard answers" in data, only "optimal solutions."  
+
+My two biggest takeaways are:  
+**The importance of feature engineering**  
+Subtle differences in data preprocessing (like choosing between MinMaxScaler and StandardScaler) can significantly impact model performance.
+**Technology serves business needs**  
+Even the most sophisticated algorithms are hard to implement effectively when divorced from business context. 
+For instance, operational strategies for "star products" must incorporate user behavior data to avoid becoming "armchair theorizing."
 
