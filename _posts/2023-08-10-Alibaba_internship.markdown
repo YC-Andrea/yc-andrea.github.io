@@ -22,7 +22,6 @@ I conducted an in-depth analysis of non-specialty products for a leading e-comme
 the Boston Matrix and K-means clustering, completing a full analytical cycle from data cleaning to 
 strategic recommendations. This blog shares this technically rigorous and commercially valuable 
 analytical journey.
-![](/img/36600_poster.pdf)
 
 
 ## Methodology & Tool Stack
