@@ -86,6 +86,7 @@ for r in range(2, len(features)+1):
             best_combo = combo
             best_score = score
 ```
+![](/img/alibaba_clustering.png)
 Final key feature combination:
 `Price × Sales × Transaction Growth`
 
@@ -104,6 +105,8 @@ def dynamic_threshold(data):
 market_share_thresh = dynamic_threshold(cleaned_share)
 growth_thresh = dynamic_threshold(cleaned_growth)
 ```
+![](/img/BCG_Matrix.png)
+
 ### 2. Four-Quadrant Classification Logic
 ```ts
 graph TD
