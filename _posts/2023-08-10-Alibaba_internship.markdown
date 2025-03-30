@@ -86,7 +86,7 @@ for r in range(2, len(features)+1):
             best_combo = combo
             best_score = score
 ```
-![](/img/alibaba_clustering.png)
+![Figure 1. Alibaba Clustering.](/img/alibaba_clustering.png)
 Final key feature combination:
 `Price × Sales × Transaction Growth`  
 The experimental results demonstrate that, regardless of whether the cluster number K=5 or K=8, the silhouette coefficients achieved with StandardScaler preprocessing (K=5: 0.736; K=8: 0.747) are significantly higher than those with MinMaxScaler (K=5: 0.432; K=8: 0.459), indicating that StandardScaler more effectively enhances clustering quality. As K increases, both methods show modest improvements in silhouette coefficients (MinMaxScaler +6.3%, StandardScaler +1.5%), suggesting that appropriately increasing the number of clusters can optimize model performance.  
