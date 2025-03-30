@@ -44,6 +44,8 @@ to visualize rainfall and vegetation trends across all districts
 
 ![](/img/HW1_fig1.png)
 <center>Figure1. Time series graphs for Rainfall in the sequence of Province.</center>
+
+
 ![](/img/HW1_fig2.png)
 <center>Figure2. Time series graphs for Vegetation Index in the sequence of Province.</center>
 
