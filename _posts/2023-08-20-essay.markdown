@@ -142,16 +142,16 @@ This study reevaluated stock price prediction by comparing the performance of tr
 linear regression model and advanced models such as LSTM and bagged trees were used to predict equity premiums, evaluating their performance using OOS-R2, RMSE, and MAE.  This study concludes that while advanced machine learning models offer improved performance metrics, the equity premium remains fundamentally challenging to predict accurately. Contributing factors to this unpredictability include limited access to comprehensive information, the inherent noise and complexity of financial markets, the simplicity of models used, and the over-fitting tendency of complex models on historical data. To improve future predictions, incorporating alternative data sources, advanced noise-filtering techniques, hybrid models, and better regularization methods, as well as developing dynamic models that adapt to changing market conditions, are recommended.
 
 ## REFERENCES
-Ang, A., & Bekaert, G. (2007). Stock return predictability: Is it there? The Review of Financial Studies, 20(3), 651-707.
-Campbell, J. Y., & Shiller, R. J. 1988. The dividend-price ratio and expectations of future dividends and discount factors. The review of financial studies, 1(3), 195-228.
-Chen, Y., Cheng, Q., Cheng, Y., Yang, H., & Yu, H. (2018). Applications of recurrent neural networks in environmental factor forecasting: A review. Neural Computation, 30(11), 2855-2881.
-Fama, E. F., & French, K. R. (1996). Multifactor explanations of asset pricing anomalies. The Journal of Finance, 51(1), 55-84.
-Gu, S., Kelly, B., & Xiu, D. 2020. Empirical asset pricing via machine learning. The Review of Financial Studies, 33(5), 2223-2273.
-Lettau, M., & Ludvigson, S. 2001. Consumption, aggregate wealth, and expected stock returns. the Journal of Finance, 56(3), 815-849.
-Mehra, R., & Prescott, E. C. 2003. The equity premium in retrospect. Handbook of the Economics of Finance, 1, 889-938.
-Opitz, D., & Maclin, R. (1999). Popular ensemble methods: An empirical study. Journal of Artificial Intelligence Research, 11, 169-198.
-Ingolfsson, T. M. (2021, November 10). Insights into LSTM architecture. Retrieved from https://thorirmar.com/post/insight_into_lstm/ 
-Welch, I., & Goyal, A. 2008. A comprehensive look at the empirical performance of equity premium prediction. The Review of Financial Studies, 21(4), 1455-1508.
-Wu, Y., Ke, Y., Chen, Z., Liang, S., Zhao, H., & Hong, H. (2020). Application of alternating decision tree with AdaBoost and bagging ensembles for landslide susceptibility mapping. Catena, 187, 104396.
+Ang, A., & Bekaert, G. (2007). Stock return predictability: Is it there? The Review of Financial Studies, 20(3), 651-707.  
+Campbell, J. Y., & Shiller, R. J. 1988. The dividend-price ratio and expectations of future dividends and discount factors. The review of financial studies, 1(3), 195-228.  
+Chen, Y., Cheng, Q., Cheng, Y., Yang, H., & Yu, H. (2018). Applications of recurrent neural networks in environmental factor forecasting: A review. Neural Computation, 30(11), 2855-2881.  
+Fama, E. F., & French, K. R. (1996). Multifactor explanations of asset pricing anomalies. The Journal of Finance, 51(1), 55-84.  
+Gu, S., Kelly, B., & Xiu, D. 2020. Empirical asset pricing via machine learning. The Review of Financial Studies, 33(5), 2223-2273.  
+Lettau, M., & Ludvigson, S. 2001. Consumption, aggregate wealth, and expected stock returns. the Journal of Finance, 56(3), 815-849.  
+Mehra, R., & Prescott, E. C. 2003. The equity premium in retrospect. Handbook of the Economics of Finance, 1, 889-938.  
+Opitz, D., & Maclin, R. (1999). Popular ensemble methods: An empirical study. Journal of Artificial Intelligence Research, 11, 169-198.  
+Ingolfsson, T. M. (2021, November 10). Insights into LSTM architecture. Retrieved from https://thorirmar.com/post/insight_into_lstm/   
+Welch, I., & Goyal, A. 2008. A comprehensive look at the empirical performance of equity premium prediction. The Review of Financial Studies, 21(4), 1455-1508.  
+Wu, Y., Ke, Y., Chen, Z., Liang, S., Zhao, H., & Hong, H. (2020). Application of alternating decision tree with AdaBoost and bagging ensembles for landslide susceptibility mapping. Catena, 187, 104396.  
 
 
