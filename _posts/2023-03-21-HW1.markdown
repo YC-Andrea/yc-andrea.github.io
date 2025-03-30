@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "From Data to Insights"
-subtitle: “Exploring the Hidden Relationship”
+subtitle: "Exploring the Hidden Relationship"
 date:       2023-03-21 12:00:00
 author: "Yingqian Cao"
 header-style: text
@@ -22,11 +22,11 @@ building—and reveals intriguing patterns linking rainfall dynamics to vegetati
 
 ## Data Exploration & Preprocessing
 ### Data Sources & Structure
-Rainfall Data: Monthly rainfall records from January 2000 to December 2015 (180 months).
+Rainfall Data: Monthly rainfall records from January 2000 to December 2015 (180 months).  
 Vegetation Index Data: Records span May 2000 to December 2015 (176 months), 
-with the first four months marked as NA.
-Geospatial Data: Includes coordinates and administrative information for each district.
-**Data Loading & Cleaning**
+with the first four months marked as NA.  
+Geospatial Data: Includes coordinates and administrative information for each district.  
+**Data Loading & Cleaning**  
 Using numpy to load data and replace NA values in vegetation data with None to ensure numerical consistency:
 ```ts
 import numpy as np
@@ -62,7 +62,7 @@ def plot_graph(dic, title, ylabel):
     plt.show()
 ```
 ## Statistical Features: Monthly Patterns at National Scale
-Calculating Mean, Median, and Extremes
+**Calculating Mean, Median, and Extremes**
 
 The `Helper1` function aggregated data by month and computed statistical metrics. 
 Results revealed:
@@ -127,7 +127,7 @@ model.fit(X_sma, y_vegetation)
 **Lag Effects:** Vegetation responds to rainfall with a 1-month delay; 3-month moving averages best capture cumulative impacts.  
 **Model Trade-offs:** While decision trees performed best, polynomial models (e.g., cubic regression) balance accuracy and interpretability.  
 **Geospatial Influence:** Rainfall correlation decays with distance, yet national climate patterns remain coherent.  
-**Future Directions:**
+**Future Directions:**  
 Incorporate additional variables (soil type, temperature) into multifactor models.  
 Explore deep learning (e.g., LSTMs) to capture long-term dependencies.
 
