@@ -41,7 +41,7 @@ This study aims to introduce linear regression model and advanced machine learni
 ### 2.1 Dataset Preparation
 In this study, the equity premium dataset is used for stock prices’ evaluating (Welch et al., 2008). The data is related to equity premium with prominent variables, which stores 1, 620 records (i.e., one instance per month) and covers 17 columns. All variables are numerical fields. Based on the equity premium dataset, 14 different explanatory variables are recreated such as inflation and stock variance (Welch et al., 2008).
 In order to understand the extreme values and temporal trend of the data, the data was plotted, as shown in Figure 1.  
-![Figure1_Explanatory_variable_against_time_(1871 - 2005)](/img/essay_Fig1.png)
+![Figure1_Explanatory_variable_against_time_(1871-2005)](/img/essay_Fig1.png)
 
 
 ### 2.2 Machine Learning-based Prediction
