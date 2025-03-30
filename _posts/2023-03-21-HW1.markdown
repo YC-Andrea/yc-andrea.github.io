@@ -42,9 +42,11 @@ A dictionary was built to store geospatial metadata, and the CSVtoDic function t
 raw data into district-specific time series. Using matplotlib, 5x6 subplots were generated 
 to visualize rainfall and vegetation trends across all districts 
 
+![](/img/HW1_fig1.png)
+<center>Figure1. Time series graphs for Rainfall in the sequence of Province.</center>
+![](/img/HW1_fig2.png)
+<center>Figure2. Time series graphs for Vegetation Index in the sequence of Province.</center>
 
-
-(Figures 1 & 2).
 
 
 **Key Observations:**
@@ -68,9 +70,9 @@ The `Helper1` function aggregated data by month and computed statistical metrics
 Results revealed:
 
 **Rainfall Peak Lag:** National averages peaked in April and November, 
-but extreme rainfall events clustered in May and October (Figure 3).
+but extreme rainfall events clustered in May and October.
 **Delayed Vegetation Response:** Vegetation indices did not immediately drop during droughts (July),
-suggesting a 1-2 month lag (Figure 4).
+suggesting a 1-2 month lag.
 ```ts
 def Helper1(data_dict):
     monthly_stats = {'mean': [], 'median': [], 'min': [], 'max': []}
@@ -97,8 +99,8 @@ distances = haversine_distances(locations) * 6371  # Convert to kilometers
 
 **Optimizing Lag (k) and Moving Window (n)**
 
-**Lag Analysis:** Correlating vegetation with rainfall lagged by 1-12 months showed k=1 month as optimal (Figure 7), aligning with ecological response delays.
-**Moving Average:** Testing window lengths (1-12 months) revealed n=3 months maximized model performance (Figure 8).
+**Lag Analysis:** Correlating vegetation with rainfall lagged by 1-12 months showed k=1 month as optimal, aligning with ecological response delays.
+**Moving Average:** Testing window lengths (1-12 months) revealed n=3 months maximized model performance.
 ```ts
 # Example: Lagged feature calculation
 delayed_corr = np.zeros((30, 13))
@@ -112,11 +114,9 @@ for k in range(13):
 
 **Comparing Models & Feature Combinations**
 
-**Feature Importance:** Moving average (SMA) features outperformed raw and lagged data
-(Tables 2-4).
+**Feature Importance:** Moving average (SMA) features outperformed raw and lagged data.
 **Model Selection:** Decision Tree Regression (Adjusted R²=0.47) slightly edged 
-out polynomial models (Figure 12), but cubic regression offered better interpretability 
-(Figures 9-11).
+out polynomial models, but cubic regression offered better interpretability.
 ```ts
 from sklearn.tree import DecisionTreeRegressor
 # Decision Tree training
