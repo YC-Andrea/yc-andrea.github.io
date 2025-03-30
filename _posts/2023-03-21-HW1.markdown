@@ -39,8 +39,7 @@ for i in range(181):
 ## Visualization: Seasonal Patterns in Time Series
 **Plotting District-Level Trends**
 A dictionary was built to store geospatial metadata, and the CSVtoDic function transformed 
-raw data into district-specific time series. Using matplotlib, 5x6 subplots were generated 
-to visualize rainfall and vegetation trends across all districts:
+raw data into district-specific time series. 
 
 ```ts
 def plot_graph(dic, title, ylabel):
@@ -53,7 +52,7 @@ def plot_graph(dic, title, ylabel):
     plt.suptitle(title)
     plt.show()
 ```
-
+Using matplotlib, 5x6 subplots were generated to visualize rainfall and vegetation trends across all districts:
 ![](/img/HW1_fig1.png)
 <center>Figure1. Time series graphs for Rainfall in the sequence of Province.</center>
 
@@ -69,10 +68,9 @@ def plot_graph(dic, title, ylabel):
 
 **Calculating Mean, Median, and Extremes**
 
-Aggregated data by month and computed statistical metrics.  
-Results revealed:
-**Rainfall Peak Lag:** National averages peaked in April and November, 
-but extreme rainfall events clustered in May and October.  
+Aggregated data by month and computed statistical metrics.Results revealed:  
+**Rainfall Peak Lag:** National averages peaked in April and November, but extreme rainfall events clustered in May and October.  
+
 **Delayed Vegetation Response:** Vegetation indices did not immediately drop during droughts (July),
 suggesting a 1-2 month lag.
 
@@ -94,6 +92,7 @@ distances = haversine_distances(locations) * 6371  # Convert to kilometers
 **Optimizing Lag (k) and Moving Window (n)**
 
 **Lag Analysis:** Correlating vegetation with rainfall lagged by 1-12 months showed k=1 month as optimal, aligning with ecological response delays.  
+
 **Moving Average:** Testing window lengths (1-12 months) revealed n=3 months maximized model performance.
 ```ts
 # Example: Lagged feature calculation
