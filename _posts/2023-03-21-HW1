@@ -1,0 +1,139 @@
+---
+layout: post
+title: "From Data to Insights"
+subtitle: “Exploring the Hidden Relationship”
+date:       2023-03-21 12:00:00
+author: "Yingqian Cao"
+header-style: text
+catalog:      true
+tags:
+  - Machine Learning
+  - Python
+  - Time Series
+
+---
+
+## INTRODUCTION
+Recently, I acquired two historical monthly datasets for 30 districts in Rwanda: 
+Rainfall and Vegetation Index. As someone passionate about data science, I decided to dive 
+deep into these datasets to uncover potential relationships between rainfall patterns and 
+vegetation growth. This blog documents my analytical journey—from data cleaning to model 
+building—and reveals intriguing patterns linking rainfall dynamics to vegetation health.
+
+## Data Exploration & Preprocessing
+### Data Sources & Structure
+Rainfall Data: Monthly rainfall records from January 2000 to December 2015 (180 months).
+Vegetation Index Data: Records span May 2000 to December 2015 (176 months), 
+with the first four months marked as NA.
+Geospatial Data: Includes coordinates and administrative information for each district.
+**Data Loading & Cleaning**
+Using numpy to load data and replace NA values in vegetation data with None to ensure numerical consistency:
+```ts
+import numpy as np
+RV = np.genfromtxt('RwandaDistrictVegetation.csv', dtype=str, delimiter=',', encoding='utf-8-sig')
+for i in range(181):
+    for j in range(32):
+        if RV[j][i] == "NA":
+            RV[j][i] = None
+```
+## Visualization: Seasonal Patterns in Time Series
+**Plotting District-Level Trends**
+A dictionary was built to store geospatial metadata, and the CSVtoDic function transformed 
+raw data into district-specific time series. Using matplotlib, 5x6 subplots were generated 
+to visualize rainfall and vegetation trends across all districts 
+
+
+
+(Figures 1 & 2).
+
+
+**Key Observations:**
+- Consistent Rainfall Peaks: All districts showed higher rainfall in spring (March-May) and fall (September-December), with dry summers (June-August).
+- Divergent Vegetation Dynamics: Vegetation fluctuations varied significantly—e.g., Gasabo (Kigali City) had the highest volatility, while Gakenke (Northern Province) was the most stable.
+```ts
+def plot_graph(dic, title, ylabel):
+    fig, axs = plt.subplots(5, 6, figsize=(30, 20), sharex=True)
+    for i in range(5):
+        for j in range(6):
+            district = list(dic.keys())[i*6 + j]
+            axs[i,j].plot(dic[district].astype(np.float64))
+            axs[i,j].set_title(f"{district}", fontsize=8)
+    plt.suptitle(title)
+    plt.show()
+```
+## Statistical Features: Monthly Patterns at National Scale
+Calculating Mean, Median, and Extremes
+
+The `Helper1` function aggregated data by month and computed statistical metrics. 
+Results revealed:
+
+**Rainfall Peak Lag:** National averages peaked in April and November, 
+but extreme rainfall events clustered in May and October (Figure 3).
+**Delayed Vegetation Response:** Vegetation indices did not immediately drop during droughts (July),
+suggesting a 1-2 month lag (Figure 4).
+```ts
+def Helper1(data_dict):
+    monthly_stats = {'mean': [], 'median': [], 'min': [], 'max': []}
+    for month in range(12):
+        monthly_data = [data[month::12] for data in data_dict.values()]
+        monthly_stats['mean'].append(np.nanmean(monthly_data))
+        monthly_stats['median'].append(np.nanmedian(monthly_data))
+    return monthly_stats
+```
+
+## Spatial Correlation: How Rainfall Dependence Decays with Distance
+
+**Pairwise Correlation vs. Geographic Distance**
+
+Using the `haversine` formula to calculate distances between districts, 
+an exponential decay model was fitted:
+```ts
+from sklearn.metrics.pairwise import haversine_distances
+# Calculate geographic distance matrix
+distances = haversine_distances(locations) * 6371  # Convert to kilometers
+```
+
+## Feature Engineering: The Power of Lagged & Moving Average Features
+
+**Optimizing Lag (k) and Moving Window (n)**
+
+**Lag Analysis:** Correlating vegetation with rainfall lagged by 1-12 months showed k=1 month as optimal (Figure 7), aligning with ecological response delays.
+**Moving Average:** Testing window lengths (1-12 months) revealed n=3 months maximized model performance (Figure 8).
+```ts
+# Example: Lagged feature calculation
+delayed_corr = np.zeros((30, 13))
+for k in range(13):
+    for i in range(30):
+        rainfall_shifted = rainfall_data[i][k:-k]
+        corr = np.corrcoef(rainfall_shifted, vegetation_data[i])[0,1]
+        delayed_corr[i, k] = corr
+```
+## Model Optimization: From Linear Regression to Decision Trees
+
+**Comparing Models & Feature Combinations**
+
+**Feature Importance:** Moving average (SMA) features outperformed raw and lagged data
+(Tables 2-4).
+**Model Selection:** Decision Tree Regression (Adjusted R²=0.47) slightly edged 
+out polynomial models (Figure 12), but cubic regression offered better interpretability 
+(Figures 9-11).
+```ts
+from sklearn.tree import DecisionTreeRegressor
+# Decision Tree training
+model = DecisionTreeRegressor(max_depth=3)
+model.fit(X_sma, y_vegetation)
+```
+## Conclusions & Implications
+**Lag Effects:** Vegetation responds to rainfall with a 1-month delay; 3-month moving averages best capture cumulative impacts.  
+**Model Trade-offs:** While decision trees performed best, polynomial models (e.g., cubic regression) balance accuracy and interpretability.  
+**Geospatial Influence:** Rainfall correlation decays with distance, yet national climate patterns remain coherent.  
+**Future Directions:**
+Incorporate additional variables (soil type, temperature) into multifactor models.  
+Explore deep learning (e.g., LSTMs) to capture long-term dependencies.
+
+
+
+
+## REFERENCES
+[1] Chicco et al. (2021). PeerJ Computer Science  
+[2] Chen et al. (2020). Scientific Reports
