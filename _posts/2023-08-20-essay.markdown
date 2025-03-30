@@ -108,21 +108,21 @@ A horizontal comparison of metrics for model evaluation was calculated, as liste
 
 
 
-Table 1:  R-squared distributions.  
+<center>Table 1.  R-squared distributions for three models at different time intervals. </center>
 |Period | Rolling Linear Regression model | LSTM model|Bagging Tree model|
 |-------|-------|-------|-------|
-| 1965-2008| 0.034 | -0.673 |-0.0810|
-| 1976-2008 | -0.837| -0.8195|-0.092 |
-| 2000-2008| -2.312 | 0.0648 |-0.1617|
+|1965-2008|0.034| -0.673 |-0.0810|
+|1976-2008|-0.837| -0.8195|-0.092 |
+|2000-2008|-2.312| 0.0648 |-0.1617|
 
-Table 2: RMSE distributions.  
+<center>Table 2: RMSE distributions for three models at different time intervals.</center>
 |Period | Rolling Linear Regression model | LSTM model|Bagging Tree model|
 |-------|-------|-------|-------|
 | 1965-2008| 0.043| 0.0569|0.0021|
 | 1976-2008 | 0.059	|0.0589|0.0021|
 | 2000-2008| 0.081 | 0.0437 |0.0024|
 
-Table 3: MAE distributions.   
+<center>Table 3: MAE distributions for three models at different time intervals.</center>  
 |Period | Rolling Linear Regression model | LSTM model|Bagging Tree model|
 |-------|-------|-------|-------|
 | 1965-2008| 0.032 |0.0440|0.0342|
