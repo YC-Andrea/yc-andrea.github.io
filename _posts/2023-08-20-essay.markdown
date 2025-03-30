@@ -42,7 +42,7 @@ This study aims to introduce linear regression model and advanced machine learni
 In this study, the equity premium dataset is used for stock prices’ evaluating (Welch et al., 2008). The data is related to equity premium with prominent variables, which stores 1, 620 records (i.e., one instance per month) and covers 17 columns. All variables are numerical fields. Based on the equity premium dataset, 14 different explanatory variables are recreated such as inflation and stock variance (Welch et al., 2008).
 In order to understand the extreme values and temporal trend of the data, the data was plotted, as shown in Figure 1.  
 ![](/img/essay_Fig1.png)
-|*Figure1. Explanatory variable against time (1871-2005).*|
+<center>*Figure1. Explanatory variable against time (1871-2005).*</center>
 
 ### 2.2 Machine Learning-based Prediction
 In this part, rolling linear regression model is used to replicate and verify the conclusions in Welch et al., 2008. Then, two advanced models (RNNs and bagged tree) are used to improve and recreate R2, RMSE and MAE values. 
@@ -105,6 +105,7 @@ The plots shown in Figure 7, Figure 8 and Figure 9 demonstrate that the bidirect
 The plot shown in Figure 10, Figure 11 and Figure 12 shows that while the predictions from the decision tree model generally follow the same pattern as the true data, there are frequent and abrupt fluctuations in the predictions that do not align smoothly with the equity premium’s trend. Although the model captures some of the general rise and fall of the true data, these frequent, jagged movements suggest that the decision tree model is not a suitable method for reliable equity premium forecasting.The irregular pattern of the predictions suggests that this model is overly sensitive to changes in the training data and does not capture the underlying market dynamics consistently or meaningfully.
 ### 3.2 Metrics
 A horizontal comparison of metrics for model evaluation was calculated, as listed in Table 1, Table 2 and Table 3. 
+
 
 
 Table 1:  R-squared distributions.  
