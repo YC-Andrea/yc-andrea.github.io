@@ -49,7 +49,7 @@ In this part, rolling linear regression model is used to replicate and verify th
 #### 2.2.1 Linear Regression-based Prediction
 Rolling linear regression model fits regressions to a window of data, continuously updating the model as the window shifts forward over time. The illustration of rolling multiple linear regression model is shown in Figure 2. 
 
-![Figure 2: Illustration of the Mode](/img/essay_Fig2.png)
+![Figure2_Illustration_of_the_Mode](/img/essay_Fig2.png)
 
 
 Using a rolling linear regression model offers several advantages. This approach allows for dynamic analysis by enabling model parameters to change over time, thus capturing evolving relationships between variables. It also aids in detecting structural changes or breaks in the data, providing insights into periods of instability or shifts in underlying processes. Additionally, it improves model robustness by reducing the impact of outliers and anomalies, ensuring reliability even with unusual data points. In this part, the model does not require the determination of any extra parameters.
