@@ -88,7 +88,8 @@ for r in range(2, len(features)+1):
 ```
 ![](/img/alibaba_clustering.png)
 Final key feature combination:
-`Price × Sales × Transaction Growth`
+`Price × Sales × Transaction Growth`  
+The experimental results demonstrate that, regardless of whether the cluster number K=5 or K=8, the silhouette coefficients achieved with StandardScaler preprocessing (K=5: 0.736; K=8: 0.747) are significantly higher than those with MinMaxScaler (K=5: 0.432; K=8: 0.459), indicating that StandardScaler more effectively enhances clustering quality. As K increases, both methods show modest improvements in silhouette coefficients (MinMaxScaler +6.3%, StandardScaler +1.5%), suggesting that appropriately increasing the number of clusters can optimize model performance.  
 
 ## Boston Matrix Construction Process
 ### 1. Dynamic Threshold Setting
@@ -106,6 +107,7 @@ market_share_thresh = dynamic_threshold(cleaned_share)
 growth_thresh = dynamic_threshold(cleaned_growth)
 ```
 ![](/img/BCG_Matrix.png)
+In this analytical report, we applied the Boston Matrix framework to visualize collected data on a two-dimensional chart, with market growth rate plotted on the Y-axis and market share on the X-axis. Each product was then positioned within the matrix according to its individual market share and growth rate metrics. This approach enabled us to conduct focused analysis on products.
 
 ### 2. Four-Quadrant Classification Logic
 ```ts
