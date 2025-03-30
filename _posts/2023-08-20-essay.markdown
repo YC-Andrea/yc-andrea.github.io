@@ -109,6 +109,7 @@ A horizontal comparison of metrics for model evaluation was calculated, as liste
 
 
 <center>Table 1.  R-squared distributions for three models at different time intervals. </center>
+
 |Period | Rolling Linear Regression model | LSTM model|Bagging Tree model|
 |-------|-------|-------|-------|
 |1965-2008|0.034| -0.673 |-0.0810|
@@ -116,18 +117,21 @@ A horizontal comparison of metrics for model evaluation was calculated, as liste
 |2000-2008|-2.312| 0.0648 |-0.1617|
 
 <center>Table 2: RMSE distributions for three models at different time intervals.</center>
+
 |Period | Rolling Linear Regression model | LSTM model|Bagging Tree model|
 |-------|-------|-------|-------|
 | 1965-2008| 0.043| 0.0569|0.0021|
 | 1976-2008 | 0.059	|0.0589|0.0021|
 | 2000-2008| 0.081 | 0.0437 |0.0024|
 
-<center>Table 3: MAE distributions for three models at different time intervals.</center>  
+<center>Table 3: MAE distributions for three models at different time intervals.</center> 
+
 |Period | Rolling Linear Regression model | LSTM model|Bagging Tree model|
 |-------|-------|-------|-------|
 | 1965-2008| 0.032 |0.0440|0.0342|
 | 1976-2008 |0.037|0.0493|0.0344|
 | 2000-2008| 0.049|0.0332|0.0351|
+
 The bagging tree model is the most reliable, despite its negative R-squared values, followed by the rolling linear regression model, with the LSTM model being the least effective. 
 The performance differences among the models can be attributed to several factors. The rolling linear regression model tends to overfit historical data, capturing noise rather than underlying trends, and lacks the flexibility to model non-linear relationships and complex market dynamics. Additionally, its assumption of parameter stability over time does not hold well in the volatile stock market, reducing predictive accuracy. The LSTM model, while designed to handle long-term dependencies, struggled with capturing equity premium trends due to its high data and hyperparameter tuning requirements, and its sensitivity to sequence length. The bagged trees model, on the other hand, benefits from capturing complex interactions and non-linear relationships through ensemble learning, reducing over-fitting and variance. However, it exhibited frequent abrupt fluctuations, indicating noise sensitivity and potential over-fitting to training data, along with insufficient temporal adaptation, affecting its long-term prediction reliability. These differences indicated by its negative R-squared values, which highlight the inherent unpredictability of the equity premium.
 ### 3.3 Discussion
