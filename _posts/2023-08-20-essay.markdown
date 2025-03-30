@@ -42,7 +42,7 @@ This study aims to introduce linear regression model and advanced machine learni
 In this study, the equity premium dataset is used for stock prices’ evaluating (Welch et al., 2008). The data is related to equity premium with prominent variables, which stores 1, 620 records (i.e., one instance per month) and covers 17 columns. All variables are numerical fields. Based on the equity premium dataset, 14 different explanatory variables are recreated such as inflation and stock variance (Welch et al., 2008).
 In order to understand the extreme values and temporal trend of the data, the data was plotted, as shown in Figure 1.  
 ![](/img/essay_Fig1.png)
-<center>*Figure1. Explanatory variable against time (1871-2005).*</center>
+<center>Figure1. Explanatory variable against time (1871-2005).</center>
 
 ### 2.2 Machine Learning-based Prediction
 In this part, rolling linear regression model is used to replicate and verify the conclusions in Welch et al., 2008. Then, two advanced models (RNNs and bagged tree) are used to improve and recreate R2, RMSE and MAE values. 
@@ -50,7 +50,7 @@ In this part, rolling linear regression model is used to replicate and verify th
 Rolling linear regression model fits regressions to a window of data, continuously updating the model as the window shifts forward over time. The illustration of rolling multiple linear regression model is shown in Figure 2. 
 
 ![](/img/essay_Fig2.png)
-|*Figure2. Illustration of rolling linear regression model.*|
+<center>Figure2. Illustration of rolling linear regression model.</center>
 
 Using a rolling linear regression model offers several advantages. This approach allows for dynamic analysis by enabling model parameters to change over time, thus capturing evolving relationships between variables. It also aids in detecting structural changes or breaks in the data, providing insights into periods of instability or shifts in underlying processes. Additionally, it improves model robustness by reducing the impact of outliers and anomalies, ensuring reliability even with unusual data points. In this part, the model does not require the determination of any extra parameters.
 #### 2.2.2 LSTM
@@ -60,7 +60,7 @@ In this part, the model is trained with a hidden state of 256 neurons, learning 
 
 
 ![](/img/essay_Fig3.png)
-|*Figure 3. Interacting layers in an LSTM (Thorir, 2021)*|
+<center>Figure 3. Interacting layers in an LSTM (Thorir, 2021).</center>
 
 #### 2.2.3 Bagged Trees Model
 Bootstrap aggregating, commonly known as bagging, is an ensemble meta-algorithm in machine learning that enhances the stability and accuracy of algorithms used for classification and regression. While typically applied to decision tree methods, bagging can be utilized with any machine learning algorithm (Opitz et al., 1999).
@@ -71,36 +71,36 @@ In this part, a bagging ensemble model uses decision trees to predict the equity
 The true data and predicted values of each model is plotted against time, are shown in Figure 4-12.
 
 ![](/img/essay_Fig4.png)
-|*Figure 4. Performance for rolling linear regression (1965-2008).*|
+<center>Figure 4. Performance for rolling linear regression (1965-2008).</center>
 
 ![](/img/essay_Fig5.png)
-|*Figure 5. Performance for rolling linear regression (1976-2008).*|
+<center>Figure 5. Performance for rolling linear regression (1976-2008).</center>
 
 ![](/img/essay_Fig6.png)
-|*Figure 6. Performance for rolling linear regression (2000-2008).*|
+<center>Figure 6. Performance for rolling linear regression (2000-2008).</center>
 
 From the plots of rolling linear regression shown in Figure 4, Figure 5 and Figure 6, the true data and predictions align closely, suggesting potential over-fitting in the model. During the 1965-2008 period, the actual data shows the highest equity premium around 1987, whereas the model's predictions indicate peaks around 1965 and 2008. In the 1976-2008 period, the true label of the largest equity premium (negative) occurs around 1987, but the model predicts the highest premiums around 1976 (positive) and 2008. For the 2000-2008 period, the true data exhibits relatively stable equity premiums, while the model forecasts significant peaks in 2001 (positive) and 2002 (negative).
 
 ![](/img/essay_Fig7.png)
-|*Figure 7. Performance for LSTM (1965-2008).*|
+<center>Figure 7. Performance for LSTM (1965-2008).</center>
 
 ![](/img/essay_Fig8.png)
-|*Figure 8. Performance for LSTM (1976-2008).*|
+<center>Figure 8. Performance for LSTM (1976-2008).</center>
 
 
 ![](/img/essay_Fig9.png)
-|*Figure 9. Performance for LSTM (2000-2008).*|
+<center>Figure 9. Performance for LSTM (2000-2008).</center>
 
 The plots shown in Figure 7, Figure 8 and Figure 9 demonstrate that the bidirectional LSTM model no longer exhibits over fitting, but fail the capture the trend across most of the periods studied. In the 1965-2008 and 1976-2008 periods, as well as the 2000-2008 period, the predictions generally do not follow the rise and fall of the actual equity premium.
 
 ![Figure 10: Performance for bagged trees (1965-2008)](/img/essay_Fig10.png)
-|*Figure 10. Performance for bagged trees (1965-2008).*|
+<center>Figure 10. Performance for bagged trees (1965-2008).</center>
 
 ![Figure 11: Performance for bagged trees (1976-2008)](/img/essay_Fig11.png)
-|*Figure 11. Performance for bagged trees (1976-2008).*|
+<center>Figure 11. Performance for bagged trees (1976-2008).</center>
 
 ![Figure 12: Performance for bagged trees (2000-2008)](/img/essay_Fig12.png)
-|*Figure 12. Performance for bagged trees (2000-2008).*|
+<center>Figure 12. Performance for bagged trees (2000-2008).</center>
 
 The plot shown in Figure 10, Figure 11 and Figure 12 shows that while the predictions from the decision tree model generally follow the same pattern as the true data, there are frequent and abrupt fluctuations in the predictions that do not align smoothly with the equity premium’s trend. Although the model captures some of the general rise and fall of the true data, these frequent, jagged movements suggest that the decision tree model is not a suitable method for reliable equity premium forecasting.The irregular pattern of the predictions suggests that this model is overly sensitive to changes in the training data and does not capture the underlying market dynamics consistently or meaningfully.
 ### 3.2 Metrics
@@ -113,14 +113,15 @@ Table 1:  R-squared distributions.
 |-------|-------|-------|-------|
 | 1965-2008| 0.034 | -0.673 |-0.0810|
 | 1976-2008 | -0.837| -0.8195|-0.092 |
-| 2000-2008| -2.312 | 0.0648 |-0.1617  |
+| 2000-2008| -2.312 | 0.0648 |-0.1617|
 
 Table 2: RMSE distributions.  
 |Period | Rolling Linear Regression model | LSTM model|Bagging Tree model|
 |-------|-------|-------|-------|
 | 1965-2008| 0.043| 0.0569|0.0021|
-| 1976-2008 | 0.059	|0.0589|0.0021 |
+| 1976-2008 | 0.059	|0.0589|0.0021|
 | 2000-2008| 0.081 | 0.0437 |0.0024|
+
 Table 3: MAE distributions.   
 |Period | Rolling Linear Regression model | LSTM model|Bagging Tree model|
 |-------|-------|-------|-------|
