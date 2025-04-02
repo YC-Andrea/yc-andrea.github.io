@@ -1,7 +1,9 @@
 ---
 layout: post
-title: " Building a 2D Platform Game"
-subtitle: "SpongeBob Themed Game in Python"
+title: "构建一个2D平台游戏"
+subtitle: "用python构建海绵宝宝主题游戏"
+english_title: "Building a 2D Platform Game"
+english_subtitle: "SpongeBob Themed Game in Python"
 date:       2022-08-20 12:00:00
 author: "Yingqian Cao"
 header-style: text
@@ -11,7 +13,7 @@ tags:
   - CMU
   - Python
 ---
-
+english_content: |
 
 
 ## Introduction
@@ -217,4 +219,5 @@ def Psmarter(Px, Py, Sx, Sy, dx, dy):
 
 This project not only reinforced my programming knowledge from CMU 15112 but also deepened my understanding of key game development concepts like resource management, input handling, collision detection, and game state management. I hope this article inspires you to begin your own game development journey!
 
-
+---
+这里是中文内容...嘿嘿嘿
