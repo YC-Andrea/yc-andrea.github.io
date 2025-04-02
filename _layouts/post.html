@@ -10,6 +10,16 @@ layout: default
 {% include intro-header.html type='post' %}
 
 <!-- Post Content -->
+<!-- 英文标题部分需要独立处理 -->
+<article class="en post-container">
+    <header>
+        <h1>{{ page.english_title }}</h1>
+        {% if page.english_subtitle %}
+        <h2 class="subtitle">{{ page.english_subtitle }}</h2>
+        {% endif %}
+    </header>
+</article>
+
 <article>
     <div class="container">
         <div class="row">
