@@ -61,7 +61,7 @@ kramdown:
 markdown: kramdown
 highlighter: rouge
 # 设置默认语言（可选）
-default_lang: zh
+default_lang: en
 # 设置多语言集合（如果需要）
 collections:
   posts_en:
