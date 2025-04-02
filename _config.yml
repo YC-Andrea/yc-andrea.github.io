@@ -57,15 +57,17 @@ kramdown:
     block:
       line_numbers: true
       start_line: 1
-defaults:
-  - scope:
-      path: ""
-      type: "posts"
-    values:
-      lang: "zh"
-
-languages: ["zh", "en"]
-
+# 确保启用 Markdown 和 Front Matter
+markdown: kramdown
+highlighter: rouge
+# 设置默认语言（可选）
+default_lang: zh
+# 设置多语言集合（如果需要）
+collections:
+  posts_en:
+    output: true
+    permalink: /en/:year/:month/:day/:title.html
+    
 # Disqus settings
 disqus_username: hux
 
