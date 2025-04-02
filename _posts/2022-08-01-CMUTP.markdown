@@ -40,7 +40,7 @@ english_content: |
   ## Code Structure
 
   1. Game Initialization
-The `appStarted` function initializes game resources including images, sounds, character positions, and platform layouts:  
+  The `appStarted` function initializes game resources including images, sounds, character positions, and platform layouts:  
   ```ts
   def appStarted(app):
       app.sound_win = Sound('win.mp3')
