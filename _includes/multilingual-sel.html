@@ -1,6 +1,20 @@
-                <!-- Language Selector -->
+<!--                 <!-- Language Selector -->
                 <select class="sel-lang" onchange= "onLanChange(this.options[this.options.selectedIndex].value)">
                     <option value="0" selected> 中文 | Chinese </option>
                     <option value="1"> 英文 | English </option>
-                </select>
+                </select> -->
+{% include multilingual-sel.html %}
 
+<!-- 中文版本 -->
+<article class="zh post-container">
+    <h1>{{ page.title }}</h1>
+    {% if page.subtitle %}<h2>{{ page.subtitle }}</h2>{% endif %}
+    {{ content }}
+</article>
+
+<!-- 英文版本 -->
+<article class="en post-container">
+    <h1>{{ page.english_title }}</h1>
+    {% if page.english_subtitle %}<h2>{{ page.english_subtitle }}</h2>{% endif %}
+    {{ page.english_content | markdownify }}
+</article>
