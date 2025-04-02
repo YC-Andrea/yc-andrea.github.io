@@ -11,6 +11,7 @@ multilingual: true
 tags:
   - CMU
   - Python
+---
 english_content: |
   ## Introduction
   This article shares my term project for [Carnegie Mellon University's 15112 course (Fundamentals of   Programming)](https://www.cs.cmu.edu/~112/syllabus.html) - [a SpongeBob-themed 2D platform game developed in Python](https://www.bilibili.com/video/BV1HG4y1V755/?      spm_id_from=333.1387.homepage.video_card.click&vd_source=1502ea6f8fd7ecde5aff19ec5001af2d). The project    utilizes the `cmu_112_graphics` library provided by the course to simplify graphics and animation handling. This article demonstrates how I built a simple game from scratch, including game design, code implementation, and key programming techniques.
@@ -213,6 +214,7 @@ english_content: |
   ## Conclusion
   
   This project not only reinforced my programming knowledge from CMU 15112 but also deepened my understanding of key game development concepts like resource management, input handling, collision detection, and game state management. I hope this article inspires you to begin your own game development journey!
+
 ---
   ## 引言
   本文分享我在 [卡内基梅隆大学15112课程（编程基础](https://www.cs.cmu.edu/~112/syllabus.html) - [基于Python开发的《海绵宝宝》主题2D平台游戏](https://www.bilibili.com/video/BV1HG4y1V755/?      spm_id_from=333.1387.homepage.video_card.click&vd_source=1502ea6f8fd7ecde5aff19ec5001af2d)。 项目使用课程提供的 `cmu_112_graphics` 库简化图形动画处理，完整展示了我从零搭建游戏的过程，包含游戏设计、代码实现与关键技术解析。
@@ -236,7 +238,7 @@ english_content: |
 
   ## 代码结构
 
- ### 1. 游戏初始化
+  ### 1. 游戏初始化
   appStarted函数初始化游戏资源（图像/音效/角色位置/平台布局）：
   ```ts
   def appStarted(app):
