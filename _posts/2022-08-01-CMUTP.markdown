@@ -11,7 +11,7 @@ multilingual: true
 tags:
   - CMU
   - Python
----
+
 english_content: |
   ## Introduction
   This article shares my term project for [Carnegie Mellon University's 15112 course (Fundamentals of   Programming)](https://www.cs.cmu.edu/~112/syllabus.html) - [a SpongeBob-themed 2D platform game developed in Python](https://www.bilibili.com/video/BV1HG4y1V755/?      spm_id_from=333.1387.homepage.video_card.click&vd_source=1502ea6f8fd7ecde5aff19ec5001af2d). The project    utilizes the `cmu_112_graphics` library provided by the course to simplify graphics and animation handling. This article demonstrates how I built a simple game from scratch, including game design, code implementation, and key programming techniques.
