@@ -54,7 +54,7 @@ The `appStarted` function initializes game resources including images, sounds, c
       app.image_ladd = app.loadImage('ladder2.png')
       app.sprites = [app.loadImage(f'P{i}.png') for i in range(5)]
       app.spriteCounter = 0
-  ```
+   ```
 
   2. Game Logic
   The keyPressed and timerFired functions handle player input and game state updates:  
@@ -215,5 +215,5 @@ The `appStarted` function initializes game resources including images, sounds, c
   This project not only reinforced my programming knowledge from CMU 15112 but also deepened my understanding of key game development concepts like resource management, input handling, collision detection, and game state management. I hope this article inspires you to begin your own game development journey!
 
 ---
-## 介绍
-这里是中文内容...嘿嘿嘿
+  ## 介绍
+  这里是中文内容...嘿嘿嘿
