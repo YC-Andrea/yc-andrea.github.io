@@ -215,5 +215,200 @@ english_content: |
   This project not only reinforced my programming knowledge from CMU 15112 but also deepened my understanding of key game development concepts like resource management, input handling, collision detection, and game state management. I hope this article inspires you to begin your own game development journey!
 
 ---
-  ## 介绍
-  这里是中文内容...嘿嘿嘿
+  ## 引言
+  本文分享我在 [卡内基梅隆大学15112课程（编程基础](https://www.cs.cmu.edu/~112/syllabus.html) - [基于Python开发的《海绵宝宝》主题2D平台游戏](https://www.bilibili.com/video/BV1HG4y1V755/?      spm_id_from=333.1387.homepage.video_card.click&vd_source=1502ea6f8fd7ecde5aff19ec5001af2d)。 项目使用课程提供的 `cmu_112_graphics` 库简化图形动画处理，完整展示了我从零搭建游戏的过程，包含游戏设计、代码实现与关键技术解析。
+  ![](/img/TP-img.png)
+
+
+  ## 项目背景
+
+  T这是CMU 15112课程的期末作业，旨在通过实践巩固课堂所学的编程概念。项目要求设计实现一个中等复杂度的游戏，我选择开发2D平台跳跃游戏。
+
+ ## 游戏设计
+
+  灵感源自经典平台游戏，玩家操控海绵宝宝在平台上移动，收集蟹黄堡并躲避痞老板的追击。游戏包含两个不同布局的关卡，玩家可通过键盘控制角色移动，并使用武器击败敌人。
+  
+  ## 技术栈
+
+  * 编程语言：Python  
+  * 图形库：cmu_112_graphics（CMU 15112提供的简化图形库）  
+  * 资源管理：图像/音效文件的加载使用  
+  * 游戏逻辑：碰撞检测、角色移动、关卡设计  
+
+  ## 代码结构
+
+ ### 1. 游戏初始化
+  appStarted函数初始化游戏资源（图像/音效/角色位置/平台布局）：
+  ```ts
+  def appStarted(app):
+      app.sound_win = Sound('win.mp3')
+      app.sound_lose = Sound('lose.mp3')
+      app.sound_hit = Sound('hit.mp3')
+      app.sound = Sound('music.mp3')
+      app.image_url = app.loadImage('background.png')
+      app.image_SBSP = app.loadImage('SBSP.png')
+      app.image_KB = app.loadImage('KB.png')
+      app.image_platform = app.loadImage('platform.png')
+      app.image_ladd = app.loadImage('ladder2.png')
+      app.sprites = [app.loadImage(f'P{i}.png') for i in range(5)]
+      app.spriteCounter = 0
+   ```
+
+  ### 2. 游戏逻辑
+   keyPressed和timerFired函数处理玩家输入与游戏状态更新：
+  ```ts
+  def keyPressed(app, event):
+      if event.key == 'Up':
+          app.SBSP_y1 -= app.SBSP_v1
+      elif event.key == 'Down':
+          app.SBSP_y1 += app.SBSP_v1
+      elif event.key == 'Left':
+          app.SBSP_x1 -= app.SBSP_v1
+      elif event.key == 'Right':
+          app.SBSP_x1 += app.SBSP_v1
+      elif event.key == 'Space':
+          if ShotPlankton(app, app.SBSP_x1, app.SBSP_y1, app.P1_x, app.P1_y):
+              app.weapon -= 1
+              app.lives += 1
+  ```
+
+  ### 3. 游戏渲染
+   redrawAll函数绘制所有游戏元素：
+  ```ts
+  def redrawAll(app, canvas):
+      if app.screencount == 0:
+          DrawStartScreen(app, canvas)
+      elif app.screencount == 1:
+          DrawLevel1(app, canvas)
+      elif app.screencount == 2:
+          DrawLevel2(app, canvas)
+      elif app.screencount == 4:
+          DrawLose(app, canvas)
+      elif app.screencount == 5:
+          DrawWin(app, canvas)
+  ```
+
+  ### 4. 游戏结束
+    显示胜利/失败界面：  
+  ```ts
+  def DrawLose(app, canvas):
+      canvas.create_image(500, 300, image=ImageTk.PhotoImage(app.image_lose2))
+      canvas.create_text(app.width//2, app.height//9, 
+                        text="Press 'r' to restart", font='Arial 30 bold')
+  def DrawWin(app, canvas):
+      canvas.create_image(500, 300, image=ImageTk.PhotoImage(app.image_win2))
+      canvas.create_text(app.width//2, app.height//9, 
+                        text="You Win!", font='Arial 30 bold')
+  ```
+  
+  
+  
+  ## 挑战与解决方案
+  
+  ### 挑战1：梯子攀爬机制
+  **问题：**  
+  角色在梯子附近移动不流畅，容易卡住    
+  **解决方案：**  
+  实现梯子接近检测（Climbing1/2/3函数）  
+  攀爬时禁用重力以允许自由垂直移动  
+  添加攀爬缓冲区域（通过num1参数调节）  
+  ```ts
+  def Climbing2(app, ladlist, x, y, r, num1):
+      cx, cy = x-r, y-r
+      for ladder in ladlist:
+          l_x = ladder.x + ladder.w//2
+          l_y = ladder.y + ladder.h//2
+          if dis(l_x, l_y, cx, cy) <= num1:
+              return True  # Enable climbing
+      return False
+  ```
+  ### 挑战2：像素级碰撞检测
+  **问题：**  
+  基础矩形碰撞导致"擦墙"时卡顿或穿模  
+  **解决方案：**  
+  实现多层级碰撞检测：  
+  初筛阶段（AABB矩形检测）  
+  精确像素距离验证  
+  为不同对象定制碰撞盒（如梯子仅垂直检测）  
+  ```ts
+  def SBSPHitPlakton(app, Sx, Sy, Px, Py):
+      # Precise distance check
+      if abs(Sx-Px) < 10 and abs(Sy-Py-app.pla_h) < 10:
+          return True
+      return False
+  ```
+  
+  ### 挑战3：武器命中判定
+  **问题：**  
+  武器投射物因检测范围不合理难以命中敌人 
+  **解决方案：**  
+ 添加投射物轨迹预测  
+改用圆形碰撞检测（替代矩形）  
+实现命中确认缓冲区域
+  ```ts
+  def ShotPlankton(app, Sx, Sy, Px, Py):
+      if SBSPHitPlakton1(app, Sx, Sy, Px, Py) and app.weapon > 0:
+          app.weapon -= 1
+          return True
+      return False
+  ```
+  ### 挑战4：痞老板的跨关卡AI进化
+  游戏中痞老板作为主要敌人，在不同关卡具有差异化行为：  
+  ##### 1. 核心移动架构 
+  **数据结构：**
+  ```ts
+  # Each Plankton instance stores:
+  # [x_pos, y_pos, base_y_pos, current_speed]
+  app.KBlist1 = [
+      [x1, y1, base_y1, speed1],
+      [x2, y2, base_y2, speed2]
+  ]
+  ```
+  **更新逻辑：**
+  ```ts
+  def timerFired(app):
+      for enemy in app.KBlist1:
+          enemy[1] += enemy[3]  # Update y-position by speed
+  ```
+  ##### 2.  第一关：简单巡逻移动  
+  **初始方案：**
+  ```ts
+  # Fixed directional sequence
+  app.direction = [(0,4),(4,0),(0,-4),(0,4),(0,-4),(-4,0)]
+  ```
+  问题：
+  移动模式可预测性强  
+  平台边缘容易卡住  
+  缺乏玩家追踪  
+  **优化方案：**
+  ```ts
+  def movePattern1(enemy):
+      # Reverse direction at boundaries
+      if enemy[1] > enemy[2] + 100 or enemy[1] < enemy[2] - 100:
+          enemy[3] *= -1  # Invert speed
+  ```
+  ##### 3. 第二关：智能玩家追踪
+  **增强算法：**
+  ```ts
+  def Psmarter(Px, Py, Sx, Sy, dx, dy):
+      """Advanced tracking algorithm"""
+      # Calculate player distance
+      distance = ((Sx-Px)**2 + (Sy-Py)**2)**0.5
+      # Dynamic sensitivity adjustment
+      sensitivity = max(0.3, 2 - distance/80)  
+      # Directional steering
+      if Sy-Py < -10*sensitivity and dy > 0:
+          dy *= -1
+      elif Sx-Px < -10*sensitivity and dx > 0:
+          dx *= -1
+      # Random perturbation for unpredictability
+      dx += random.uniform(-0.5, 0.5)
+      dy += random.uniform(-0.5, 0.5)
+      return dx, dy
+  ```
+  
+  
+  ## 结语
+  
+  本项目不仅巩固了我在CMU 15112课程所学的编程知识，更深入理解了资源管理、输入处理、碰撞检测和游戏状态管理等游戏开发核心概念。希望本文能激发你开启自己的游戏开发之旅！
+
