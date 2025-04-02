@@ -1,220 +1,217 @@
 ---
+---
 layout: post
-title: "构建一个2D平台游戏"
-subtitle: "用python构建海绵宝宝主题游戏"
-english_title: "Building a 2D Platform Game"
-english_subtitle: "SpongeBob Themed Game in Python"
-date:       2022-08-20 12:00:00
+title: "CMU 技术项目"
+english_title: "CMU Technical Project"
+english_subtitle: "A Python-based Game Development"  # 注意冒号后的空格
+date: 2022-08-01 12:00:00
 author: "Yingqian Cao"
-header-style: text
 multilingual: true
 tags:
   - CMU
   - Python
 english_content: |
-
-## Introduction
-
-This article shares my term project for [Carnegie Mellon University's 15112 course (Fundamentals of Programming)](https://www.cs.cmu.edu/~112/syllabus.html) - [a SpongeBob-themed 2D platform game developed in Python](https://www.bilibili.com/video/BV1HG4y1V755/?spm_id_from=333.1387.homepage.video_card.click&vd_source=1502ea6f8fd7ecde5aff19ec5001af2d). The project utilizes the `cmu_112_graphics` library provided by the course to simplify graphics and animation handling. This article demonstrates how I built a simple game from scratch, including game design, code implementation, and key programming techniques.
-![](/img/TP-img.png)
+  ## Introduction
+  This article shares my term project for [Carnegie Mellon University's 15112 course (Fundamentals of   Programming)](https://www.cs.cmu.edu/~112/syllabus.html) - [a SpongeBob-themed 2D platform game developed in Python](https://www.bilibili.com/video/BV1HG4y1V755/?      spm_id_from=333.1387.homepage.video_card.click&vd_source=1502ea6f8fd7ecde5aff19ec5001af2d). The project    utilizes the `cmu_112_graphics` library provided by the course to simplify graphics and animation handling. This article demonstrates how I built a simple game from scratch, including game design, code implementation, and key programming techniques.
+  ![](/img/TP-img.png)
 
 
-## Project Background
+  ## Project Background
 
-This project was the term assignment for CMU 15112, designed to reinforce programming concepts learned in class through practical application. The requirements were to design and implement a moderately complex game, and I chose to develop a 2D platformer.
+  This project was the term assignment for CMU 15112, designed to reinforce programming concepts learned in class through practical application. The requirements were to design and implement a moderately complex game, and I chose to develop a 2D platformer.
 
 
-## Game Design
+  ## Game Design
 
-Inspired by classic platformer games, players control SpongeBob to move across platforms, collect Krabby Patties, and avoid Plankton's pursuit. The game features two levels with different layouts and challenges. Players can control SpongeBob's movement using keyboard inputs and use weapons to defeat Plankton.
+  Inspired by classic platformer games, players control SpongeBob to move across platforms, collect Krabby Patties, and avoid Plankton's pursuit. The game features two levels with different layouts and challenges. Players can control SpongeBob's movement using keyboard inputs and use weapons to defeat Plankton.
 
 
 
-## Tech Stack
+  ## Tech Stack
 
-* Programming Language: Python
-* Graphics Library: `cmu_112_graphics` (simplified graphics library provided by CMU 15112)
-* Resource Management: Loading and using image/sound files
-* Game Logic: Collision detection, character movement, level design
+  * Programming Language: Python
+  * Graphics Library: `cmu_112_graphics` (simplified graphics library provided by CMU 15112)
+  * Resource Management: Loading and using image/sound files
+  * Game Logic: Collision detection, character movement, level design
 
 
 
-## Code Structure
+  ## Code Structure
 
-1. Game Initialization
+  1. Game Initialization
 The `appStarted` function initializes game resources including images, sounds, character positions, and platform layouts:  
-```ts
-def appStarted(app):
-    app.sound_win = Sound('win.mp3')
-    app.sound_lose = Sound('lose.mp3')
-    app.sound_hit = Sound('hit.mp3')
-    app.sound = Sound('music.mp3')
-    app.image_url = app.loadImage('background.png')
-    app.image_SBSP = app.loadImage('SBSP.png')
-    app.image_KB = app.loadImage('KB.png')
-    app.image_platform = app.loadImage('platform.png')
-    app.image_ladd = app.loadImage('ladder2.png')
-    app.sprites = [app.loadImage(f'P{i}.png') for i in range(5)]
-    app.spriteCounter = 0
-```
+  ```ts
+  def appStarted(app):
+      app.sound_win = Sound('win.mp3')
+      app.sound_lose = Sound('lose.mp3')
+      app.sound_hit = Sound('hit.mp3')
+      app.sound = Sound('music.mp3')
+      app.image_url = app.loadImage('background.png')
+      app.image_SBSP = app.loadImage('SBSP.png')
+      app.image_KB = app.loadImage('KB.png')
+      app.image_platform = app.loadImage('platform.png')
+      app.image_ladd = app.loadImage('ladder2.png')
+      app.sprites = [app.loadImage(f'P{i}.png') for i in range(5)]
+      app.spriteCounter = 0
+  ```
 
-2. Game Logic
-The keyPressed and timerFired functions handle player input and game state updates:  
-```ts
-def keyPressed(app, event):
-    if event.key == 'Up':
-        app.SBSP_y1 -= app.SBSP_v1
-    elif event.key == 'Down':
-        app.SBSP_y1 += app.SBSP_v1
-    elif event.key == 'Left':
-        app.SBSP_x1 -= app.SBSP_v1
-    elif event.key == 'Right':
-        app.SBSP_x1 += app.SBSP_v1
-    elif event.key == 'Space':
-        if ShotPlankton(app, app.SBSP_x1, app.SBSP_y1, app.P1_x, app.P1_y):
-            app.weapon -= 1
-            app.lives += 1
-```
+  2. Game Logic
+  The keyPressed and timerFired functions handle player input and game state updates:  
+  ```ts
+  def keyPressed(app, event):
+      if event.key == 'Up':
+          app.SBSP_y1 -= app.SBSP_v1
+      elif event.key == 'Down':
+          app.SBSP_y1 += app.SBSP_v1
+      elif event.key == 'Left':
+          app.SBSP_x1 -= app.SBSP_v1
+      elif event.key == 'Right':
+          app.SBSP_x1 += app.SBSP_v1
+      elif event.key == 'Space':
+          if ShotPlankton(app, app.SBSP_x1, app.SBSP_y1, app.P1_x, app.P1_y):
+              app.weapon -= 1
+              app.lives += 1
+  ```
 
-3. Game Rendering
-The redrawAll function draws all game elements:  
-```ts
-def redrawAll(app, canvas):
-    if app.screencount == 0:
-        DrawStartScreen(app, canvas)
-    elif app.screencount == 1:
-        DrawLevel1(app, canvas)
-    elif app.screencount == 2:
-        DrawLevel2(app, canvas)
-    elif app.screencount == 4:
-        DrawLose(app, canvas)
-    elif app.screencount == 5:
-        DrawWin(app, canvas)
-```
+  3. Game Rendering
+  The redrawAll function draws all game elements:  
+  ```ts
+  def redrawAll(app, canvas):
+      if app.screencount == 0:
+          DrawStartScreen(app, canvas)
+      elif app.screencount == 1:
+          DrawLevel1(app, canvas)
+      elif app.screencount == 2:
+          DrawLevel2(app, canvas)
+      elif app.screencount == 4:
+          DrawLose(app, canvas)
+      elif app.screencount == 5:
+          DrawWin(app, canvas)
+  ```
 
-4. Game Over
-Win/lose screens are displayed when appropriate:  
-```ts
-def DrawLose(app, canvas):
-    canvas.create_image(500, 300, image=ImageTk.PhotoImage(app.image_lose2))
-    canvas.create_text(app.width//2, app.height//9, 
-                      text="Press 'r' to restart", font='Arial 30 bold')
-def DrawWin(app, canvas):
-    canvas.create_image(500, 300, image=ImageTk.PhotoImage(app.image_win2))
-    canvas.create_text(app.width//2, app.height//9, 
-                      text="You Win!", font='Arial 30 bold')
-```
-
-
-
-## Challenges and Solutions
-
-### Challenge 1: Ladder Climbing Mechanism  
-**Problem:**  
-Character movement felt unresponsive near ladders, often getting stuck.  
-**Solutions:**  
-Implemented ladder proximity detection (Climbing1/2/3)  
-Disabled gravity while on ladders to allow free vertical movement  
-Added a climbing buffer zone (adjusted via num1 parameter)
-```ts
-def Climbing2(app, ladlist, x, y, r, num1):
-    cx, cy = x-r, y-r
-    for ladder in ladlist:
-        l_x = ladder.x + ladder.w//2
-        l_y = ladder.y + ladder.h//2
-        if dis(l_x, l_y, cx, cy) <= num1:
-            return True  # Enable climbing
-    return False
-```
-### Challenge 2: Pixel-Perfect Collision
-**Problem:**  
-Basic rectangle collision caused stuttering when "grazing" walls or allowed clipping through thin objects.  
-**Solutions:**  
-Implemented multi-tier collision detection:  
-Initial broad-phase (AABB rectangle check)  
-Followed by precise pixel-distance verification  
-Custom collision boxes for different objects (e.g., vertical-only checks for ladders)
-```ts
-def SBSPHitPlakton(app, Sx, Sy, Px, Py):
-    # Precise distance check
-    if abs(Sx-Px) < 10 and abs(Sy-Py-app.pla_h) < 10:
-        return True
-    return False
-```
-
-### Challenge 3: Weapon Hit Detection
-**Problem:**  
-Weapon projectiles struggled to reliably hit enemies due to unreasonable detection ranges.  
-**Solutions:**  
-Added projectile trajectory prediction  
-Switched to circular collision detection (instead of rectangular)  
-Implemented hit confirmation buffer zones
-```ts
-def ShotPlankton(app, Sx, Sy, Px, Py):
-    if SBSPHitPlakton1(app, Sx, Sy, Px, Py) and app.weapon > 0:
-        app.weapon -= 1
-        return True
-    return False
-```
-### Challenge 4: Evolving Plankton AI Across Levels
-In my game, Plankton serves as the primary enemy with distinct movement behaviors per level.
-##### 1. Core Movement Architecture  
-**Data Structure:**
-```ts
-# Each Plankton instance stores:
-# [x_pos, y_pos, base_y_pos, current_speed]
-app.KBlist1 = [
-    [x1, y1, base_y1, speed1],
-    [x2, y2, base_y2, speed2]
-]
-```
-**Update Logic:**
-```ts
-def timerFired(app):
-    for enemy in app.KBlist1:
-        enemy[1] += enemy[3]  # Update y-position by speed
-```
-##### 2. Level 1: Simple Patrol Movement  
-**Initial Approach:**
-```ts
-# Fixed directional sequence
-app.direction = [(0,4),(4,0),(0,-4),(0,4),(0,-4),(-4,0)]
-```
-Issues:  
-Overly predictable patterns  
-Frequent edge-sticking on platforms  
-No player tracking  
-**Optimized Solution:**
-```ts
-def movePattern1(enemy):
-    # Reverse direction at boundaries
-    if enemy[1] > enemy[2] + 100 or enemy[1] < enemy[2] - 100:
-        enemy[3] *= -1  # Invert speed
-```
-##### 3. Level 2: Intelligent Player Tracking
-**Enhanced Algorithm:**
-```ts
-def Psmarter(Px, Py, Sx, Sy, dx, dy):
-    """Advanced tracking algorithm"""
-    # Calculate player distance
-    distance = ((Sx-Px)**2 + (Sy-Py)**2)**0.5
-    # Dynamic sensitivity adjustment
-    sensitivity = max(0.3, 2 - distance/80)  
-    # Directional steering
-    if Sy-Py < -10*sensitivity and dy > 0:
-        dy *= -1
-    elif Sx-Px < -10*sensitivity and dx > 0:
-        dx *= -1
-    # Random perturbation for unpredictability
-    dx += random.uniform(-0.5, 0.5)
-    dy += random.uniform(-0.5, 0.5)
-    return dx, dy
-```
-
-
-## Conclusion
-
-This project not only reinforced my programming knowledge from CMU 15112 but also deepened my understanding of key game development concepts like resource management, input handling, collision detection, and game state management. I hope this article inspires you to begin your own game development journey!
+  4. Game Over
+  Win/lose screens are displayed when appropriate:  
+  ```ts
+  def DrawLose(app, canvas):
+      canvas.create_image(500, 300, image=ImageTk.PhotoImage(app.image_lose2))
+      canvas.create_text(app.width//2, app.height//9, 
+                        text="Press 'r' to restart", font='Arial 30 bold')
+  def DrawWin(app, canvas):
+      canvas.create_image(500, 300, image=ImageTk.PhotoImage(app.image_win2))
+      canvas.create_text(app.width//2, app.height//9, 
+                        text="You Win!", font='Arial 30 bold')
+  ```
+  
+  
+  
+  ## Challenges and Solutions
+  
+  ### Challenge 1: Ladder Climbing Mechanism  
+  **Problem:**  
+  Character movement felt unresponsive near ladders, often getting stuck.  
+  **Solutions:**  
+  Implemented ladder proximity detection (Climbing1/2/3)  
+  Disabled gravity while on ladders to allow free vertical movement  
+  Added a climbing buffer zone (adjusted via num1 parameter)
+  ```ts
+  def Climbing2(app, ladlist, x, y, r, num1):
+      cx, cy = x-r, y-r
+      for ladder in ladlist:
+          l_x = ladder.x + ladder.w//2
+          l_y = ladder.y + ladder.h//2
+          if dis(l_x, l_y, cx, cy) <= num1:
+              return True  # Enable climbing
+      return False
+  ```
+  ### Challenge 2: Pixel-Perfect Collision
+  **Problem:**  
+  Basic rectangle collision caused stuttering when "grazing" walls or allowed clipping through thin objects.  
+  **Solutions:**  
+  Implemented multi-tier collision detection:  
+  Initial broad-phase (AABB rectangle check)  
+  Followed by precise pixel-distance verification  
+  Custom collision boxes for different objects (e.g., vertical-only checks for ladders)
+  ```ts
+  def SBSPHitPlakton(app, Sx, Sy, Px, Py):
+      # Precise distance check
+      if abs(Sx-Px) < 10 and abs(Sy-Py-app.pla_h) < 10:
+          return True
+      return False
+  ```
+  
+  ### Challenge 3: Weapon Hit Detection
+  **Problem:**  
+  Weapon projectiles struggled to reliably hit enemies due to unreasonable detection ranges.  
+  **Solutions:**  
+  Added projectile trajectory prediction  
+  Switched to circular collision detection (instead of rectangular)  
+  Implemented hit confirmation buffer zones
+  ```ts
+  def ShotPlankton(app, Sx, Sy, Px, Py):
+      if SBSPHitPlakton1(app, Sx, Sy, Px, Py) and app.weapon > 0:
+          app.weapon -= 1
+          return True
+      return False
+  ```
+  ### Challenge 4: Evolving Plankton AI Across Levels
+  In my game, Plankton serves as the primary enemy with distinct movement behaviors per level.
+  ##### 1. Core Movement Architecture  
+  **Data Structure:**
+  ```ts
+  # Each Plankton instance stores:
+  # [x_pos, y_pos, base_y_pos, current_speed]
+  app.KBlist1 = [
+      [x1, y1, base_y1, speed1],
+      [x2, y2, base_y2, speed2]
+  ]
+  ```
+  **Update Logic:**
+  ```ts
+  def timerFired(app):
+      for enemy in app.KBlist1:
+          enemy[1] += enemy[3]  # Update y-position by speed
+  ```
+  ##### 2. Level 1: Simple Patrol Movement  
+  **Initial Approach:**
+  ```ts
+  # Fixed directional sequence
+  app.direction = [(0,4),(4,0),(0,-4),(0,4),(0,-4),(-4,0)]
+  ```
+  Issues:  
+  Overly predictable patterns  
+  Frequent edge-sticking on platforms  
+  No player tracking  
+  **Optimized Solution:**
+  ```ts
+  def movePattern1(enemy):
+      # Reverse direction at boundaries
+      if enemy[1] > enemy[2] + 100 or enemy[1] < enemy[2] - 100:
+          enemy[3] *= -1  # Invert speed
+  ```
+  ##### 3. Level 2: Intelligent Player Tracking
+  **Enhanced Algorithm:**
+  ```ts
+  def Psmarter(Px, Py, Sx, Sy, dx, dy):
+      """Advanced tracking algorithm"""
+      # Calculate player distance
+      distance = ((Sx-Px)**2 + (Sy-Py)**2)**0.5
+      # Dynamic sensitivity adjustment
+      sensitivity = max(0.3, 2 - distance/80)  
+      # Directional steering
+      if Sy-Py < -10*sensitivity and dy > 0:
+          dy *= -1
+      elif Sx-Px < -10*sensitivity and dx > 0:
+          dx *= -1
+      # Random perturbation for unpredictability
+      dx += random.uniform(-0.5, 0.5)
+      dy += random.uniform(-0.5, 0.5)
+      return dx, dy
+  ```
+  
+  
+  ## Conclusion
+  
+  This project not only reinforced my programming knowledge from CMU 15112 but also deepened my understanding of key game development concepts like resource management, input handling, collision detection, and game state management. I hope this article inspires you to begin your own game development journey!
 
 ---
 ## 介绍
