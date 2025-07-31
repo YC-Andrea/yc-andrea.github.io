@@ -215,7 +215,7 @@ tags:
   ## Conclusion
   
   This project not only reinforced my programming knowledge from CMU 15112 but also deepened my understanding of key game development concepts like resource management, input handling, collision detection, and game state management. I hope this article inspires you to begin your own game development journey!
-
+<!--
 -------------------
 
   ## 引言
@@ -415,3 +415,4 @@ tags:
   
   本项目不仅巩固了我在CMU 15112课程所学的编程知识，更深入理解了资源管理、输入处理、碰撞检测和游戏状态管理等游戏开发核心概念。希望本文能激发你开启自己的游戏开发之旅！
 
+-->
