@@ -1,17 +1,16 @@
 ---
 layout: post
-title: "用python构建海绵宝宝主题游戏"
-subtitle: "2D平台跳跃游戏开发指南"
-english_title: "Building a 2D Platform Game"
-english_subtitle: "SpongeBob Themed Game in Python"
+title: "Building a 2D Platform Game"
+subtitle: "SpongeBob Themed Game in Python"
 date: 2022-08-20 12:00:00
 author: "Yingqian Cao"
 header-style: text
-multilingual: false
+
 tags:
   - CMU
   - Python
 ---
+
 
 
   ## Introduction
